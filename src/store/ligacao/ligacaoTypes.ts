@@ -69,3 +69,22 @@ export interface LigacaoPuxarResponse {
   id: number;
   display_id: number;
 }
+
+export type LigacaoTab = 'todos' | 'meus_cv';
+
+export type LigacaoCardState = 'mine' | 'reserved_by_other' | 'reservable' | 'disabled';
+
+export interface LigacaoState {
+  /** Account the stored list belongs to. */
+  accountId: number | null;
+  leads: LigacaoLead[];
+  minhaReserva: LigacaoMinhaReserva | null;
+  janela: LigacaoJanela | null;
+  janelas: LigacaoJanela[];
+  tab: LigacaoTab;
+  isLoading: boolean;
+  /** display_id of the lead whose action (reservar/liberar/puxar/resumo) is in flight. */
+  pendingDisplayId: number | null;
+  /** Last known queue access per account (true only after a 2xx). */
+  accessByAccount: Record<number, boolean>;
+}
