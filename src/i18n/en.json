@@ -494,5 +494,10 @@
       "CONVERSATIONS": "Conversations",
       "MESSAGES": "Messages"
     }
+  },
+  "LIGACOES": {
+    "ERRORS": {
+      "GENERIC": "Could not complete. Please try again."
+    }
   }
 }

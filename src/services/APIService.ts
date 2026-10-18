@@ -9,6 +9,16 @@ import { getStore } from '@/store/storeAccessor';
 import I18n from '@/i18n';
 import { showToast } from '@/utils/toastUtils';
 
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    /**
+     * When true, a failed request is rejected as-is: no logout on 401 and no
+     * generic toast. The caller is responsible for handling the error.
+     */
+    skipGlobalErrorHandler?: boolean;
+  }
+}
+
 const nonAccountRoutes = [
   'profile',
   'profile/availability',
@@ -72,6 +82,9 @@ class APIService {
       (response: AxiosResponse) => response,
       async (error: AxiosError) => {
         if (axios.isCancel(error)) {
+          return Promise.reject(error);
+        }
+        if (error.config?.skipGlobalErrorHandler) {
           return Promise.reject(error);
         }
         if (error.response?.status === 401) {

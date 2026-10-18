@@ -454,5 +454,10 @@
     "EXECUTION_SUCCESS": "Macro executada com sucesso",
     "EXECUTION_ERROR": "Falha ao executar macro",
     "NO_MACROS": "Nenhuma macro encontrada"
+  },
+  "LIGACOES": {
+    "ERRORS": {
+      "GENERIC": "Não foi possível concluir. Tente novamente."
+    }
   }
 }
