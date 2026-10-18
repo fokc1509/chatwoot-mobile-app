@@ -47,6 +47,7 @@ export interface PushPayload {
     buildNumber: string;
     push_token: string;
     device_id: string;
+    app_id: string;
   };
 }
 
