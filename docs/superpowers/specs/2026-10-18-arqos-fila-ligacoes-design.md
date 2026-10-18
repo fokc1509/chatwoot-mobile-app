@@ -99,11 +99,11 @@ relativo, testes. Usar os componentes e o tema existentes do app.
 
 ## Como testar (decisão do usuário)
 
-Contra produção, com **lead de teste** e o **usuário do próprio Felipe** — nunca em leads reais. O lead de teste é um
-contato dele (ex.: o próprio celular) que manda mensagem para a inbox comercial e fica na fila com a IA (conversa
-`pending`, etiqueta `fup-ia`, mensagem recente). O usuário dele precisa estar no time de corretores da inbox
+Contra produção, com **lead de teste** e o usuário de testes **"fc teste"** (Chatwoot) — nunca em leads reais. O lead
+de teste é um contato do Felipe (ex.: o próprio celular) que manda mensagem para a inbox comercial e fica na fila com a IA (conversa
+`pending`, etiqueta `fup-ia`, mensagem recente). O usuário "fc teste" precisa estar no time de corretores da inbox
 comercial; se não estiver, incluir antes do teste (admin não reserva nem puxa). Puxar tira o lead de teste da IA e
-grava no CV — aceitável por ser dele; para repetir o teste, devolver a conversa para a fila (nova mensagem/etiqueta).
+grava no CV — aceitável por ser um lead de teste; para repetir o teste, devolver a conversa para a fila (nova mensagem/etiqueta).
 
 ## Critério de pronto
 
