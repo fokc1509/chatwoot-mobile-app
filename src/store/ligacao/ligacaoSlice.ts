@@ -1,4 +1,5 @@
-import { createSlice, isAnyOf, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, isAnyOf, type AnyAction, type PayloadAction } from '@reduxjs/toolkit';
+import { REHYDRATE } from 'redux-persist';
 
 import { ligacaoActions, type LigacaoListError, type LigacaoListPayload } from './ligacaoActions';
 import type { LigacaoState, LigacaoTab } from './ligacaoTypes';
@@ -49,14 +50,32 @@ const ligacaoSlice = createSlice({
       .addCase(ligacaoActions.reservaConfirmada, (state, action) => {
         state.minhaReserva = action.payload;
       })
+      // The whole store is persisted: drop in-flight flags that may have been
+      // saved mid-request. The slice must be built from the inbound payload,
+      // since redux-persist keeps the reducer's value when it changes a key.
+      .addCase(REHYDRATE, (state, action: AnyAction) => {
+        const persisted = (action.payload as { ligacoes?: Partial<LigacaoState> } | undefined)
+          ?.ligacoes;
+        return {
+          ...initialState,
+          ...state,
+          ...persisted,
+          isLoading: false,
+          pendingDisplayId: null,
+        };
+      })
       .addMatcher(isAnyOf(...fetchActions.map(thunk => thunk.pending)), (state, action) => {
         switchAccount(state, (action.meta as { accountId: number | null }).accountId);
         state.isLoading = true;
       })
       .addMatcher(isAnyOf(...fetchActions.map(thunk => thunk.fulfilled)), (state, action) => {
         const { accountId, response } = action.payload as LigacaoListPayload;
-        // Always a full replacement: lists of different accounts never mix.
-        state.accountId = accountId;
+        // Pending already moved state.accountId to the latest account: a late
+        // response from a previous account is dropped.
+        if (accountId !== state.accountId) {
+          return;
+        }
+        // Always a full replacement.
         state.leads = response.leads;
         state.minhaReserva = response.minha_reserva;
         state.janela = response.meta.janela_dias;
@@ -67,13 +86,17 @@ const ligacaoSlice = createSlice({
         }
       })
       .addMatcher(isAnyOf(...fetchActions.map(thunk => thunk.rejected)), (state, action) => {
-        state.isLoading = false;
         const error = action.payload as LigacaoListError | undefined;
+        if (error && error.accountId !== state.accountId) {
+          return; // late failure from a previous account
+        }
+        state.isLoading = false;
         // Network errors, timeouts and 5xx keep the last known access.
         if (error && error.accountId !== null && DENIED_STATUSES.includes(error.status ?? 0)) {
           state.accessByAccount[error.accountId] = false;
         }
       })
+      // Assumes one item action at a time (the UI enforces it).
       .addMatcher(isAnyOf(...itemActions.map(thunk => thunk.pending)), (state, action) => {
         const arg = action.meta.arg as number | { displayId: number };
         state.pendingDisplayId = typeof arg === 'number' ? arg : arg.displayId;

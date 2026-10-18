@@ -1,3 +1,6 @@
+import { REHYDRATE } from 'redux-persist';
+import autoMergeLevel1 from 'redux-persist/lib/stateReconciler/autoMergeLevel1';
+
 import reducer, { initialState, setTab } from '../ligacaoSlice';
 import { ligacaoActions } from '../ligacaoActions';
 import type { LigacaoListResponse, LigacaoState } from '../ligacaoTypes';
@@ -19,6 +22,13 @@ const fulfilled = (accountId: number, response: LigacaoListResponse) => ({
   type: ligacaoActions.fetchLigacoes.fulfilled.type,
   payload: { accountId, response },
   meta: { arg: undefined, requestId: 'r1', requestStatus: 'fulfilled' },
+});
+
+const rejected = (accountId: number, status: number | undefined) => ({
+  type: ligacaoActions.fetchLigacoes.rejected.type,
+  payload: { accountId, status },
+  meta: { arg: undefined, requestId: 'r1', requestStatus: 'rejected', rejectedWithValue: true },
+  error: { message: 'Rejected' },
 });
 
 const stateFor = (overrides: Partial<LigacaoState>): LigacaoState => ({
@@ -64,19 +74,75 @@ describe('ligacaoSlice', () => {
 
   it('fulfilled for a different account replaces the list, never merges', () => {
     const state = stateFor({ accountId: 1, leads: [mockLigacaoLead], minhaReserva });
-    const next = reducer(
-      state,
+    const next = [
+      pending(2),
       fulfilled(2, { ...mockLigacaoListResponse, leads: [mockLigacaoLeadNulls] }),
-    );
+    ].reduce(reducer, state);
     expect(next.accountId).toBe(2);
     expect(next.leads).toEqual([mockLigacaoLeadNulls]);
     expect(next.minhaReserva).toBeNull();
     expect(next.isLoading).toBe(false);
   });
 
+  it('drops a late response from the previous account', () => {
+    const listA = {
+      ...mockLigacaoListResponse,
+      leads: [mockLigacaoLead],
+      minha_reserva: minhaReserva,
+    };
+    const listB = { ...mockLigacaoListResponse, leads: [mockLigacaoLeadNulls] };
+    const next = [pending(1), pending(2), fulfilled(2, listB), fulfilled(1, listA)].reduce(
+      reducer,
+      initialState,
+    );
+    expect(next.accountId).toBe(2);
+    expect(next.leads).toEqual([mockLigacaoLeadNulls]);
+    expect(next.minhaReserva).toBeNull();
+    expect(next.accessByAccount).toEqual({ 2: true });
+  });
+
+  it('a late failure from the previous account neither hides it nor stops loading', () => {
+    const state = stateFor({ accessByAccount: { 1: true, 2: true } });
+    const next = [pending(1), pending(2), rejected(1, 401)].reduce(reducer, state);
+    expect(next.accessByAccount).toEqual({ 1: true, 2: true });
+    expect(next.isLoading).toBe(true);
+  });
+
+  it('REHYDRATE keeps persisted data but clears in-flight flags', () => {
+    const persisted = stateFor({
+      accountId: 1,
+      leads: [mockLigacaoLead],
+      accessByAccount: { 1: true },
+      isLoading: true,
+      pendingDisplayId: 42,
+    });
+    const next = reducer(initialState, {
+      type: REHYDRATE,
+      key: 'Root',
+      payload: { ligacoes: persisted },
+    });
+    expect(next).toEqual({ ...persisted, isLoading: false, pendingDisplayId: null });
+  });
+
+  it('REHYDRATE result survives the redux-persist level-1 merge', () => {
+    const persisted = stateFor({ accessByAccount: { 1: true }, isLoading: true });
+    const inbound = { ligacoes: persisted };
+    const original = { ligacoes: initialState };
+    const reduced = {
+      ligacoes: reducer(initialState, { type: REHYDRATE, key: 'Root', payload: inbound }),
+    };
+    const merged = autoMergeLevel1(inbound, original, reduced, { debug: false } as never);
+    expect(merged.ligacoes).toEqual({ ...persisted, isLoading: false });
+  });
+
+  it('REHYDRATE without persisted data keeps the state', () => {
+    const next = reducer(initialState, { type: REHYDRATE, key: 'Root', payload: undefined });
+    expect(next).toEqual(initialState);
+  });
+
   it('fulfilled stores minha_reserva, window and available windows', () => {
     const next = reducer(
-      initialState,
+      stateFor({ accountId: 1 }),
       fulfilled(1, {
         ...mockLigacaoListResponse,
         minha_reserva: minhaReserva,
@@ -91,12 +157,7 @@ describe('ligacaoSlice', () => {
 
   it('rejected stops loading and keeps the list', () => {
     const state = stateFor({ accountId: 1, leads: [mockLigacaoLead], isLoading: true });
-    const next = reducer(state, {
-      type: ligacaoActions.fetchLigacoes.rejected.type,
-      payload: { accountId: 1, status: undefined },
-      meta: { arg: undefined, requestId: 'r1', requestStatus: 'rejected', rejectedWithValue: true },
-      error: { message: 'Rejected' },
-    });
+    const next = reducer(state, rejected(1, undefined));
     expect(next.isLoading).toBe(false);
     expect(next.leads).toEqual([mockLigacaoLead]);
   });
