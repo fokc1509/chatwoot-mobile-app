@@ -164,6 +164,13 @@ def glyph_mask(size: tuple[int, int], height: float, center: tuple[float, float]
     return mask.convert('L').resize(size, Image.LANCZOS)
 
 
+def glyph_max_radius() -> float:
+    """Maior distância de um ponto do contorno ao centro da bbox, por unidade de altura."""
+    polys, (x0, y0, x1, y1) = load_svg()
+    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+    return max(np.hypot(x - cx, y - cy) for p in polys for x, y in p) / (y1 - y0)
+
+
 def glyph_aspect() -> float:
     _, (x0, y0, x1, y1) = load_svg()
     return (x1 - x0) / (y1 - y0)
@@ -191,7 +198,12 @@ def dev_band(size: int, center_frac: float, thickness_frac: float) -> Image.Imag
     d.polygon(pts, fill=DEV_BAND + (255,))
 
     # texto em camada separada, girado -45°
-    font = ImageFont.truetype(DEV_FONT, int(thickness_frac * W * 0.62))
+    font_size = int(thickness_frac * W * 0.62)
+    try:
+        font = ImageFont.truetype(DEV_FONT, font_size)
+    except OSError:
+        print(f'aviso: fonte {DEV_FONT} ausente; usando a fonte padrão do Pillow')
+        font = ImageFont.load_default(font_size)
     tw = int(thickness_frac * W * 4)
     th = int(thickness_frac * W)
     txt = Image.new('RGBA', (tw, th), (0, 0, 0, 0))
@@ -235,15 +247,17 @@ def render() -> None:
     icon_dev.alpha_composite(dev_band(n, 0.80, 0.13))
     save_opaque(icon_dev, 'icon-dev.png')
 
-    # adaptive-icon.png: transparente; bbox do "A" inscrita no círculo de 66% (raio 338px)
+    # adaptive-icon.png: transparente. Zona segura do Android = círculo de 66dp numa tela de
+    # 108dp (66/108 = 61,1%, raio ~313px em 1024); com margem visual, todo o contorno do "A"
+    # fica dentro de um círculo de 0,58·n de diâmetro (raio ~297px).
     aspect = glyph_aspect()
-    safe_d = 0.66 * n
-    h = safe_d / np.hypot(1, aspect) * 0.98
+    assert 0.58 < 66 / 108
+    h = (0.58 * n / 2) / glyph_max_radius()
     adaptive = transparent_with_glyph(n, h)
     save_rgba(adaptive, 'adaptive-icon.png')
     adaptive_dev = adaptive.copy()
-    # faixa mais próxima do centro para continuar visível sob máscaras circulares
-    adaptive_dev.alpha_composite(dev_band(n, 0.70, 0.10))
+    # faixa mais próxima do centro: o texto "DEV" fica inteiro dentro da zona segura (r 313px)
+    adaptive_dev.alpha_composite(dev_band(n, 0.66, 0.10))
     save_rgba(adaptive_dev, 'adaptive-icon-dev.png')
 
     # splash.png: 1284x2778 creme, "A" com ~25% da largura
