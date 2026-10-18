@@ -2,16 +2,8 @@ import { apiService } from '@/services/APIService';
 import { getHttpStatus, getLigacaoErrorMessage, LigacaoService } from '../ligacaoService';
 import { mockLigacaoListResponse } from './ligacaoMockData';
 
-jest.mock('@sentry/react-native', () => ({
-  captureException: jest.fn(),
-}));
-
 jest.mock('@/i18n', () => ({
   t: (key: string) => key,
-}));
-
-jest.mock('@/utils/toastUtils', () => ({
-  showToast: jest.fn(),
 }));
 
 jest.mock('@/services/APIService', () => ({

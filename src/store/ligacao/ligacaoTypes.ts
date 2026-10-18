@@ -14,14 +14,14 @@ export interface LigacaoCv {
 }
 
 export interface LigacaoUltimaTentativa {
-  agent_nome: string;
-  at: string;
-  resultado: LigacaoResultado;
+  agent_nome: string | null;
+  at: string | null;
+  resultado: LigacaoResultado | null;
 }
 
 export interface LigacaoReserva {
   agent_id: number;
-  agent_nome: string;
+  agent_nome: string | null;
   until: string;
   minha: boolean;
 }
@@ -29,10 +29,11 @@ export interface LigacaoReserva {
 export interface LigacaoLead {
   id: number;
   display_id: number;
-  lead: string;
-  empreendimentos: string;
-  respondeu_at: string;
-  ia: boolean;
+  lead: string | null;
+  empreendimentos: string | null;
+  respondeu_at: string | null;
+  /** Name of the AI follow-up workflow handling the lead, or null. */
+  ia: string | null;
   cv: LigacaoCv;
   ultima_tentativa: LigacaoUltimaTentativa | null;
   reserva: LigacaoReserva | null;
@@ -41,9 +42,9 @@ export interface LigacaoLead {
 
 export interface LigacaoMinhaReserva {
   display_id: number;
-  lead: string;
+  lead: string | null;
   until: string;
-  telefone: string;
+  telefone: string | null;
 }
 
 export interface LigacaoListMeta {
@@ -60,7 +61,7 @@ export interface LigacaoListResponse {
 }
 
 export interface LigacaoReservarResponse {
-  telefone: string;
+  telefone: string | null;
   until: string;
 }
 
