@@ -5,6 +5,11 @@ import { ConfigContext, ExpoConfig } from 'expo/config';
 
 import { getAppVariant } from './appVariant';
 
+// Projeto EAS: preencher após `eas init` (não é segredo). O eas-cli avalia esta config sem ler o
+// `.env`, por isso os valores ficam aqui; as variáveis de ambiente só servem para sobrescrever.
+const EAS_PROJECT_ID = '';
+const EAS_OWNER = '';
+
 export default ({ config }: ConfigContext): ExpoConfig => {
   const variant = getAppVariant(process.env.APP_VARIANT);
 
@@ -65,12 +70,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     extra: {
       eas: {
-        projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+        projectId: process.env.EXPO_PUBLIC_PROJECT_ID || EAS_PROJECT_ID || undefined,
         storybookEnabled: process.env.EXPO_STORYBOOK_ENABLED,
       },
       appVariant: variant,
     },
-    owner: process.env.EXPO_OWNER,
+    owner: process.env.EXPO_OWNER || EAS_OWNER || undefined,
     plugins: [
       'expo-font',
       ['react-native-permissions', { iosPermissions: ['Camera', 'PhotoLibrary', 'MediaLibrary'] }],

@@ -40,11 +40,11 @@ Todos os perfis desligam o envio de mapas ao Sentry (`SENTRY_DISABLE_AUTO_UPLOAD
    npx eas-cli@latest whoami   # confere o usuário logado
    ```
 
-3. Crie o arquivo local de variáveis a partir do modelo e preencha o dono:
+3. Crie o arquivo local de variáveis a partir do modelo (ele define `APP_VARIANT=development`
+   para o Metro; veja a seção 4):
 
    ```bash
    cp .env.example .env
-   # edite .env: EXPO_OWNER=<seu usuário Expo>
    ```
 
 4. Crie o projeto no EAS:
@@ -53,21 +53,21 @@ Todos os perfis desligam o envio de mapas ao Sentry (`SENTRY_DISABLE_AUTO_UPLOAD
    npx eas-cli@latest init
    ```
 
-   Como o app usa configuração dinâmica (`app.config.ts`), o comando não consegue gravar o ID
-   sozinho: ele mostra o **project ID** (um UUID). Copie para o `.env`:
-   `EXPO_PUBLIC_PROJECT_ID=<uuid>`. O ID também aparece em expo.dev → projeto → _Overview_.
+   Como o app usa configuração dinâmica (`app.config.ts`), o comando cria o projeto mas não
+   consegue gravar o ID: ele mostra um **aviso e depois um erro — é esperado**. O **project ID**
+   (um UUID) aparece na saída logo acima do erro; ele também fica em expo.dev → projeto →
+   _Overview_.
 
-5. O `.env` não vai para o git nem para o servidor de build. Por isso, cadastre o dono e o
-   project ID também como variáveis do EAS, nos três ambientes:
+5. Grave o ID e o dono do projeto no topo do `app.config.ts` e faça commit (não são segredos;
+   o Claude pode fazer isso por você — basta passar o UUID e o usuário/conta Expo):
 
-   ```bash
-   npx eas-cli@latest env:set --name EXPO_OWNER --value <seu usuário Expo> \
-     --visibility plaintext --environment development --environment preview --environment production
-   npx eas-cli@latest env:set --name EXPO_PUBLIC_PROJECT_ID --value <uuid> \
-     --visibility plaintext --environment development --environment preview --environment production
+   ```ts
+   const EAS_PROJECT_ID = '<uuid>';
+   const EAS_OWNER = '<seu usuário Expo>';
    ```
 
-   Confira com `npx eas-cli@latest env:list --environment development`.
+   O `eas-cli` lê a configuração **sem** o `.env`, por isso esses valores ficam no código. A
+   partir daqui os demais comandos do EAS (`env:set`, `build`, `device:create`...) funcionam.
 
 Cada perfil usa o ambiente EAS de mesmo nome (`development-simulator` usa `development`).
 
@@ -168,10 +168,14 @@ Instalação:
 
 - **Android**: abra o link/QR do build no celular, baixe o APK e instale (o Android pede para
   permitir "instalar apps desconhecidos" para o navegador na primeira vez).
-- **Simulador iOS (no Mac)**: com o Xcode e um simulador abertos, rode no Mac (na cópia do
-  repositório ou em qualquer pasta, logado na mesma conta Expo):
-  `npx eas-cli@latest build:run --platform ios --latest`. Alternativa: baixe o `.tar.gz` do
-  build, descompacte e arraste o `.app` para a janela do simulador.
+- **Simulador iOS (no Mac)**: com o Xcode e um simulador abertos, escolha uma opção:
+  - mais simples: baixe o `.tar.gz` pela página do build, descompacte e arraste o `.app` para a
+    janela do simulador;
+  - pelo terminal do Mac, em qualquer pasta:
+    `npx eas-cli@latest build:run --platform ios --url <link do .tar.gz>` (copie o link do botão
+    de download na página do build);
+  - `npx eas-cli@latest build:run --platform ios --latest` também funciona, mas só dentro de uma
+    cópia do repositório no Mac, depois de `pnpm install` e logado na mesma conta Expo.
 - **iPhone**: depois que a conta Apple (Developer Program) estiver ativa:
   1. `npx eas-cli@latest device:create` → escolha o link/QR, abra no iPhone e instale o perfil
      (Ajustes → _Perfil baixado_). Faça o mesmo para cada iPhone de testador.
@@ -219,7 +223,7 @@ caso, use `--tunnel`.
 
 | O quê                                              | Onde                                                          |
 | -------------------------------------------------- | ------------------------------------------------------------- |
-| Usuário Expo, project ID                           | `.env` (local) e variáveis do EAS                             |
+| Usuário Expo, project ID                           | Constantes `EAS_OWNER` / `EAS_PROJECT_ID` no `app.config.ts`  |
 | `google-services.json`, `GoogleService-Info.plist` | Pasta fora do repositório + variáveis do EAS (tipo arquivo)   |
 | Conta de serviço do Firebase (JSON)                | Somente no servidor cw-arqos (`ARQOS_FIREBASE_*`)             |
 | Chave APNs `.p8`                                   | Firebase (Cloud Messaging); guarde o original em local seguro |
