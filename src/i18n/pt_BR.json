@@ -456,8 +456,11 @@
     "NO_MACROS": "Nenhuma macro encontrada"
   },
   "LIGACOES": {
+    "TAB": "Ligações",
     "ERRORS": {
-      "GENERIC": "Não foi possível concluir. Tente novamente."
+      "GENERIC": "Não foi possível concluir. Tente novamente.",
+      "NO_PHONE": "Lead sem telefone cadastrado.",
+      "DIALER": "Não foi possível abrir o discador."
     }
   }
 }

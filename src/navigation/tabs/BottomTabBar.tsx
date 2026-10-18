@@ -16,6 +16,8 @@ import {
   ConversationIconOutline,
   InboxIconFilled,
   InboxIconOutline,
+  PhoneIconFilled,
+  PhoneIconOutline,
   SettingsIconFilled,
   SettingsIconOutline,
 } from '@/svg-icons';
@@ -41,6 +43,8 @@ const TabBarIcons = ({ focused, route }: TabBarIconsProps) => {
       return focused ? <ConversationIconFilled /> : <ConversationIconOutline />;
     case 'Inbox':
       return focused ? <InboxIconFilled /> : <InboxIconOutline />;
+    case 'Ligacoes':
+      return focused ? <PhoneIconFilled /> : <PhoneIconOutline />;
     case 'Settings':
       return focused ? <SettingsIconFilled /> : <SettingsIconOutline />;
   }

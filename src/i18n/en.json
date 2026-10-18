@@ -496,8 +496,11 @@
     }
   },
   "LIGACOES": {
+    "TAB": "Calls",
     "ERRORS": {
-      "GENERIC": "Could not complete. Please try again."
+      "GENERIC": "Could not complete. Please try again.",
+      "NO_PHONE": "Lead has no phone number.",
+      "DIALER": "Could not open the dialer."
     }
   }
 }
