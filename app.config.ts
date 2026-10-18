@@ -20,7 +20,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     splash: {
       image: './assets/splash.png',
       resizeMode: 'contain',
-      backgroundColor: '#ffffff',
+      backgroundColor: '#E9E4DE',
       enableFullScreenImage_legacy: true,
     },
     ios: {
@@ -45,7 +45,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         foregroundImage: variant.isDev
           ? './assets/adaptive-icon-dev.png'
           : './assets/adaptive-icon.png',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#E9E4DE',
       },
       package: variant.appId,
       permissions: ['android.permission.CAMERA', 'android.permission.RECORD_AUDIO'],
@@ -99,6 +99,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ],
       './with-ffmpeg-pod.js',
     ],
-    androidNavigationBar: { backgroundColor: '#ffffff' },
+    androidNavigationBar: { backgroundColor: '#E9E4DE' },
   };
 };
