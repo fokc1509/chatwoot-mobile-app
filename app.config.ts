@@ -7,7 +7,7 @@ import { getAppVariant } from './appVariant';
 
 // Projeto EAS: preencher após `eas init` (não é segredo). O eas-cli avalia esta config sem ler o
 // `.env`, por isso os valores ficam aqui; as variáveis de ambiente só servem para sobrescrever.
-const EAS_PROJECT_ID = '03982cb6-0e46-4e82-9590-66f5141922e4';
+const EAS_PROJECT_ID = '56e0eb7b-8c25-45c1-9508-51bc1e51082d';
 const EAS_OWNER = 'arqostis-team';
 
 export default ({ config }: ConfigContext): ExpoConfig => {
