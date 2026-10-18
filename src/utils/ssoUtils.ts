@@ -4,6 +4,8 @@ import { authActions } from '@/store/auth/authActions';
 import { AppDispatch } from '@/store';
 import { showToast } from './toastUtils';
 import i18n from '@/i18n';
+import { getAppIdentity } from './appIdentity';
+import { buildSsoAuthUrl } from './ssoUrls';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -23,14 +25,16 @@ export class SsoUtils {
     installationUrl: string,
   ): Promise<WebBrowser.WebBrowserAuthSessionResult> {
     try {
-      // Create redirect URI with custom scheme
+      const { scheme } = getAppIdentity();
+
+      // Create redirect URI with the variant's own custom scheme
       const redirectUri = AuthSession.makeRedirectUri({
-        scheme: 'chatwootapp',
+        scheme,
         path: 'sso/callback',
       });
 
-      // Construct SSO auth URL with mobile redirect URI parameter
-      const authUrl = `${installationUrl}app/login/sso?target=mobile`;
+      // Construct SSO auth URL; the server returns only to the allow-listed scheme in `target`
+      const authUrl = buildSsoAuthUrl(installationUrl, scheme);
 
       // Start auth session
       const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
@@ -99,7 +103,7 @@ export class SsoUtils {
    */
   static parseCallbackUrl(url: string): SsoLoginParams {
     try {
-      //  The URL will be in the format chatwootapp://auth/saml?email=<email>&sso_auth_token=<auth_token>&error=<error>
+      //  The URL will be in the format <scheme>://auth/saml?email=<email>&sso_auth_token=<auth_token>&error=<error>
       const urlObj = new URL(url);
       const params: SsoLoginParams = {};
 
