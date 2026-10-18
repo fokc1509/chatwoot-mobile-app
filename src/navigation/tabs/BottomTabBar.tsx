@@ -84,6 +84,14 @@ const TabBarBackground = (props: TabBarBackgroundProps) => {
   );
 };
 
+// The original padding was sized for 3 tabs; each extra tab gives back 40px per
+// side so icons keep roughly the same slot width (no overlap on 320pt screens).
+const getSidePadding = (tabCount: number) => {
+  if (tabCount <= 3) return 'pl-[72px] pr-[71px]';
+  const padding = Math.max(16, 72 - (tabCount - 3) * 40);
+  return `pl-[${padding}px] pr-[${padding}px]`;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TabItem = (props: any) => {
   const { handlers, animatedStyle } = useScaleAnimation();
@@ -152,6 +160,8 @@ export const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarPro
     [navigation],
   );
 
+  const sidePadding = getSidePadding(state.routes.length);
+
   return (
     <TabBarBackground
       blurAmount={25}
@@ -159,13 +169,15 @@ export const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarPro
       style={Platform.select({
         ios: [
           tailwind.style(
-            'flex flex-row absolute w-full bottom-0 pl-[72px] pr-[71px] pt-[11px] pb-8 bg-[#00000009]',
+            'flex flex-row absolute w-full bottom-0 pt-[11px] pb-8 bg-[#00000009]',
+            sidePadding,
             `h-[${tabBarHeight}px]`,
           ),
         ],
         android: [
           tailwind.style(
-            'flex flex-row absolute w-full bottom-0 pl-[72px] pr-[71px] py-[11px] bg-white',
+            'flex flex-row absolute w-full bottom-0 py-[11px] bg-white',
+            sidePadding,
             `h-[${tabBarHeight}px]`,
           ),
         ],
