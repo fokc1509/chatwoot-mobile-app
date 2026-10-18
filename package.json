@@ -195,7 +195,8 @@
       "@expo/fingerprint>minimatch": "3.1.4",
       "@typescript-eslint/typescript-estree>minimatch": "9.0.7",
       "glob>minimatch": "9.0.7",
-      "tar": "7.5.11"
+      "tar": "7.5.11",
+      "@expo/cli>tar": "6.2.1"
     }
   }
 }
