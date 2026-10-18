@@ -501,6 +501,71 @@
       "GENERIC": "Could not complete. Please try again.",
       "NO_PHONE": "Lead has no phone number.",
       "DIALER": "Could not open the dialer."
+    },
+    "HEADER": "Calls",
+    "SUBTITLE": "Leads that replied to the AI in the last %{dias} days.",
+    "TOTAL": "%{count} leads",
+    "TABS": {
+      "TODOS": "All",
+      "MEUS": "My CV leads"
+    },
+    "JANELA": {
+      "LABEL": "Replied in the last",
+      "DIAS": "%{n} d"
+    },
+    "CV": {
+      "LIVRE": "unassigned",
+      "VINCULADO_VOCE": "linked to you",
+      "VINCULADO": "linked to %{nome}",
+      "VINCULADO_SEM_USUARIO": "linked in CV"
+    },
+    "RESERVA": {
+      "RESERVADO_POR": "Reserved by %{nome} until %{hora}",
+      "OUTRO_CORRETOR": "another agent",
+      "SUA_ATE": "Your reservation until %{hora}"
+    },
+    "TENTATIVA": {
+      "NAO_ATENDEU": "no answer",
+      "EXPIROU": "expired",
+      "FALEI": "talked"
+    },
+    "CARD": {
+      "RESPONDEU": "Replied %{tempo} ago",
+      "RESPONDEU_AGORA": "Replied just now",
+      "IA": "AI",
+      "CV": "CV",
+      "TENTATIVA": "Last attempt",
+      "HA": "%{tempo} ago",
+      "SEM_TELEFONE": "Phone unavailable"
+    },
+    "TEMPO": {
+      "AGORA": "now",
+      "MIN": "%{n} min",
+      "HORAS": "%{n} h",
+      "DIAS": "%{n} d"
+    },
+    "ACTIONS": {
+      "RESERVAR": "I'll call",
+      "LIGAR": "Call",
+      "ABRIR_CONVERSA": "Open conversation",
+      "PUXAR": "Talked, take it",
+      "LIBERAR": "No answer, release"
+    },
+    "RESUMO": {
+      "TITULO": "Call summary",
+      "DICA": "Write a few lines about what the lead said. It becomes a private note and a CV interaction.",
+      "PLACEHOLDER": "What the lead said, their interest and the next step…",
+      "CONTADOR": "%{count}/%{max}",
+      "SALVAR": "Save and open conversation",
+      "PULAR": "Skip"
+    },
+    "BANNER_RESERVA": "You have an ongoing reservation: %{lead} (until %{hora}).",
+    "EMPTY": "No leads in the queue right now.",
+    "TOAST": {
+      "RESERVADO": "Lead reserved.",
+      "LIBERADO": "Lead released to the queue.",
+      "PUXADO": "The lead is yours. Send the confirmation message.",
+      "RESUMO_SALVO": "Summary saved to the conversation and CV."
     }
   }
 }
