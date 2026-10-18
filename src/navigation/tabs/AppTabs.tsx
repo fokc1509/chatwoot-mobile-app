@@ -19,7 +19,7 @@ import { selectWebSocketUrl } from '@/store/settings/settingsSelectors';
 import { getUserPermissions } from '@/utils/permissionUtils';
 import { CONVERSATION_PERMISSIONS } from 'constants/permissions';
 
-import { AuthStack, ConversationStack, SettingsStack, InboxStack } from '../stack';
+import { AuthStack, ConversationStack, SettingsStack, InboxStack, LigacoesStack } from '../stack';
 import ChatScreen from '@/screens/chat-screen/ChatScreen';
 import ContactDetailsScreen from '@/screens/contact-details/ContactDetailsScreen';
 import DashboardScreen from '@/screens/dashboard/DashboardScreen';
@@ -39,12 +39,16 @@ import { clearAllDeliveredNotifications } from '@/utils/pushUtils';
 import { dashboardAppActions } from '@/store/dashboard-app/dashboardAppActions';
 import { customAttributeActions } from '@/store/custom-attribute/customAttributeActions';
 import { clearSelection } from '@/store/conversation/conversationSelectedSlice';
+import { selectLigacaoAccess } from '@/store/ligacao/ligacaoSelectors';
+import { useLigacaoAccess } from '@/hooks/useLigacaoAccess';
+import I18n from '@/i18n';
 
 const Tab = createBottomTabNavigator();
 
 export type TabParamList = {
   Conversations: undefined;
   Inbox: undefined;
+  Ligacoes: undefined;
   Settings: undefined;
   Login: undefined;
   ConfigInstallationURL: undefined;
@@ -85,6 +89,9 @@ const Tabs = () => {
   const userId = useAppSelector(selectUserId);
   const accountId = useAppSelector(selectCurrentUserAccountId);
   const webSocketUrl = useAppSelector(selectWebSocketUrl);
+  const hasLigacaoAccess = useAppSelector(selectLigacaoAccess);
+
+  useLigacaoAccess();
 
   useEffect(() => {
     // Here is the place we are loading all the data for the app first time first time or user switches account
@@ -168,6 +175,13 @@ const Tabs = () => {
           name="Conversations"
           options={{ headerShown: false }}
           component={ConversationStack}
+        />
+      )}
+      {hasLigacaoAccess && (
+        <Tab.Screen
+          name="Ligacoes"
+          options={{ headerShown: false, tabBarAccessibilityLabel: I18n.t('LIGACOES.TAB') }}
+          component={LigacoesStack}
         />
       )}
       <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsStack} />

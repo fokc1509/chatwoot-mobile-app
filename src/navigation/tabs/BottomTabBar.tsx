@@ -16,6 +16,8 @@ import {
   ConversationIconOutline,
   InboxIconFilled,
   InboxIconOutline,
+  QueueIconFilled,
+  QueueIconOutline,
   SettingsIconFilled,
   SettingsIconOutline,
 } from '@/svg-icons';
@@ -41,6 +43,8 @@ const TabBarIcons = ({ focused, route }: TabBarIconsProps) => {
       return focused ? <ConversationIconFilled /> : <ConversationIconOutline />;
     case 'Inbox':
       return focused ? <InboxIconFilled /> : <InboxIconOutline />;
+    case 'Ligacoes':
+      return focused ? <QueueIconFilled /> : <QueueIconOutline />;
     case 'Settings':
       return focused ? <SettingsIconFilled /> : <SettingsIconOutline />;
   }
@@ -80,6 +84,14 @@ const TabBarBackground = (props: TabBarBackgroundProps) => {
   );
 };
 
+// The original padding was sized for 3 tabs; each extra tab gives back 40px per
+// side so icons keep roughly the same slot width (no overlap on 320pt screens).
+const getSidePadding = (tabCount: number) => {
+  if (tabCount <= 3) return 'pl-[72px] pr-[71px]';
+  const padding = Math.max(16, 72 - (tabCount - 3) * 40);
+  return `pl-[${padding}px] pr-[${padding}px]`;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TabItem = (props: any) => {
   const { handlers, animatedStyle } = useScaleAnimation();
@@ -96,7 +108,8 @@ const TabItem = (props: any) => {
   );
   return (
     <Animated.View
-      style={[tailwind.style('justify-center items-center flex-1 bg-transparent'), animatedStyle]}>
+      style={[tailwind.style('justify-center items-center flex-1 bg-transparent'), animatedStyle]}
+    >
       <Pressable
         hitSlop={hitSlop}
         {...handlers}
@@ -105,7 +118,8 @@ const TabItem = (props: any) => {
         accessibilityLabel={options.tabBarAccessibilityLabel}
         testID={options.tabBarTestID}
         onPress={onPress}
-        onLongPress={onLongPress}>
+        onLongPress={onLongPress}
+      >
         <TabBarIcons focused={isFocused} route={route} />
       </Pressable>
     </Animated.View>
@@ -148,6 +162,8 @@ export const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarPro
     [navigation],
   );
 
+  const sidePadding = getSidePadding(state.routes.length);
+
   return (
     <TabBarBackground
       blurAmount={25}
@@ -155,17 +171,20 @@ export const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarPro
       style={Platform.select({
         ios: [
           tailwind.style(
-            'flex flex-row absolute w-full bottom-0 pl-[72px] pr-[71px] pt-[11px] pb-8 bg-[#00000009]',
+            'flex flex-row absolute w-full bottom-0 pt-[11px] pb-8 bg-[#00000009]',
+            sidePadding,
             `h-[${tabBarHeight}px]`,
           ),
         ],
         android: [
           tailwind.style(
-            'flex flex-row absolute w-full bottom-0 pl-[72px] pr-[71px] py-[11px] bg-white',
+            'flex flex-row absolute w-full bottom-0 py-[11px] bg-white',
+            sidePadding,
             `h-[${tabBarHeight}px]`,
           ),
         ],
-      })}>
+      })}
+    >
       <Animated.View style={tailwind.style('absolute inset-0 h-[1px] bg-blackA-A3')} />
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];

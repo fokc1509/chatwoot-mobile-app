@@ -454,5 +454,78 @@
     "EXECUTION_SUCCESS": "Macro executada com sucesso",
     "EXECUTION_ERROR": "Falha ao executar macro",
     "NO_MACROS": "Nenhuma macro encontrada"
+  },
+  "LIGACOES": {
+    "TAB": "Ligações",
+    "ERRORS": {
+      "GENERIC": "Não foi possível concluir. Tente novamente.",
+      "NO_PHONE": "Lead sem telefone cadastrado.",
+      "DIALER": "Não foi possível abrir o discador."
+    },
+    "HEADER": "Ligações",
+    "SUBTITLE": "Leads que responderam à IA nos últimos %{dias} dias.",
+    "TOTAL": "%{count} leads",
+    "TABS": {
+      "TODOS": "Todos",
+      "MEUS": "Meus do CV"
+    },
+    "JANELA": {
+      "LABEL": "Responderam nos últimos",
+      "DIAS": "%{n} d"
+    },
+    "CV": {
+      "LIVRE": "prateleira",
+      "VINCULADO_VOCE": "vinculado a você",
+      "VINCULADO": "vinculado a %{nome}",
+      "VINCULADO_SEM_USUARIO": "vinculado no CV"
+    },
+    "RESERVA": {
+      "RESERVADO_POR": "Reservado por %{nome} até %{hora}",
+      "OUTRO_CORRETOR": "outro corretor",
+      "SUA_ATE": "Sua reserva até %{hora}"
+    },
+    "TENTATIVA": {
+      "NAO_ATENDEU": "não atendeu",
+      "EXPIROU": "expirou",
+      "FALEI": "falou"
+    },
+    "CARD": {
+      "RESPONDEU": "Respondeu há %{tempo}",
+      "RESPONDEU_AGORA": "Respondeu agora",
+      "IA": "IA",
+      "CV": "CV",
+      "TENTATIVA": "Última tentativa",
+      "HA": "há %{tempo}",
+      "SEM_TELEFONE": "Telefone indisponível"
+    },
+    "TEMPO": {
+      "AGORA": "agora",
+      "MIN": "%{n} min",
+      "HORAS": "%{n} h",
+      "DIAS": "%{n} d"
+    },
+    "ACTIONS": {
+      "RESERVAR": "Vou ligar",
+      "LIGAR": "Ligar",
+      "ABRIR_CONVERSA": "Abrir conversa",
+      "PUXAR": "Falei, puxar para mim",
+      "LIBERAR": "Não atendeu, liberar"
+    },
+    "RESUMO": {
+      "TITULO": "Resumo da ligação",
+      "DICA": "Conte em poucas linhas o que o lead falou. Vira nota privada na conversa e interação no CV.",
+      "PLACEHOLDER": "O que o lead falou, o interesse dele e o próximo passo…",
+      "CONTADOR": "%{count}/%{max}",
+      "SALVAR": "Salvar e abrir conversa",
+      "PULAR": "Pular"
+    },
+    "BANNER_RESERVA": "Você tem uma reserva em andamento: %{lead} (até %{hora}).",
+    "EMPTY": "Nenhum lead na fila agora.",
+    "TOAST": {
+      "RESERVADO": "Lead reservado.",
+      "LIBERADO": "Lead liberado para a fila.",
+      "PUXADO": "Lead é seu. Mande a mensagem de confirmação.",
+      "RESUMO_SALVO": "Resumo salvo na conversa e no CV."
+    }
   }
 }
