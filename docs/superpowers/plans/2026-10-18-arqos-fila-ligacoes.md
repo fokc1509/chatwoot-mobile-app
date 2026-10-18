@@ -115,7 +115,8 @@
 **Files:**
 - Create: `src/screens/ligacoes/LigacoesScreen.tsx`, `src/screens/ligacoes/components/LigacaoLeadCard.tsx`, `LigacaoFilters.tsx`, `LigacaoResumoModal.tsx`, `OrphanReservationBanner.tsx`
 - Modify: `src/navigation/stack/LigacoesStack.tsx` (trocar placeholder), `src/i18n/pt_BR.json` + `en.json` (`LIGACOES.*`)
-- Test: `src/screens/ligacoes/specs/LigacaoLeadCard.spec.tsx`, `LigacaoResumoModal.spec.tsx` (usar `@testing-library/react-native` se já estiver no projeto; senão testar a lógica extraída em funções puras)
+- Create: `src/screens/ligacoes/ligacaoViewModel.ts` (funções puras que a tela usa)
+- Test: `src/screens/ligacoes/specs/ligacaoViewModel.spec.ts` — o projeto **não** tem `@testing-library/react-native`; não adicionar dependência. Testar a lógica extraída: `getCardView(lead, minhaReserva, now)` → `{ state, telefone?, reservedLabel?, untilLabel?, actions: Array<'reservar'|'ligar'|'abrir'|'puxar'|'liberar'> }` e `normalizeResumo(texto)` / `canSaveResumo(texto)`.
 
 **Interfaces:**
 - Consumes: Task 2 (actions, selectors, `getLeadCardState`), Task 3 (`startLeadCall`, rota).
@@ -132,7 +133,7 @@
   - Erros das ações → `showToast(mensagem rejeitada)`.
   - `OrphanReservationBanner` no topo quando `selectOrphanReservation` ≠ null, com botão Liberar.
   - Estado vazio: texto `LIGACOES.EMPTY`.
-- [ ] **Step 1: Testes que falham** — cartão `mine` mostra o telefone e os 4 botões e "Ligar" chama `startLeadCall({displayId, telefone})`; `reserved_by_other` mostra "Reservado por Ana até 14:35" e nenhum botão de ação; modal: Salvar desabilitado para `'   '`, texto com 2001 caracteres é cortado/bloqueado em 2000, Pular navega sem chamar `resumo`.
+- [ ] **Step 1: Testes que falham** — `getCardView` para `mine` devolve o telefone de `minhaReserva` e `actions = ['ligar','abrir','puxar','liberar']`; para `reserved_by_other` devolve `reservedLabel` com `agent_nome` "Ana" e hora "14:35" (until `…T14:35:00-03:00`, fuso do aparelho mockado em America/Sao_Paulo) e `actions = []`; `reservable` → `['reservar']`; `disabled` → `[]`. `canSaveResumo('   ') === false`; `normalizeResumo` corta em 2000 caracteres.
 - [ ] **Step 2:** `npx jest src/screens/ligacoes` → FAIL.
 - [ ] **Step 3:** Implementar usando componentes/tema existentes do app (`src/components-next`, `src/theme`).
 - [ ] **Step 4:** `npx jest` → PASS; tsc ≤ 71; lint ≤ 35 (`pnpm lint` ou o script equivalente do `package.json`).
