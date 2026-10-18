@@ -16,8 +16,8 @@ import {
   ConversationIconOutline,
   InboxIconFilled,
   InboxIconOutline,
-  PhoneIconFilled,
-  PhoneIconOutline,
+  QueueIconFilled,
+  QueueIconOutline,
   SettingsIconFilled,
   SettingsIconOutline,
 } from '@/svg-icons';
@@ -44,7 +44,7 @@ const TabBarIcons = ({ focused, route }: TabBarIconsProps) => {
     case 'Inbox':
       return focused ? <InboxIconFilled /> : <InboxIconOutline />;
     case 'Ligacoes':
-      return focused ? <PhoneIconFilled /> : <PhoneIconOutline />;
+      return focused ? <QueueIconFilled /> : <QueueIconOutline />;
     case 'Settings':
       return focused ? <SettingsIconFilled /> : <SettingsIconOutline />;
   }
@@ -108,7 +108,8 @@ const TabItem = (props: any) => {
   );
   return (
     <Animated.View
-      style={[tailwind.style('justify-center items-center flex-1 bg-transparent'), animatedStyle]}>
+      style={[tailwind.style('justify-center items-center flex-1 bg-transparent'), animatedStyle]}
+    >
       <Pressable
         hitSlop={hitSlop}
         {...handlers}
@@ -117,7 +118,8 @@ const TabItem = (props: any) => {
         accessibilityLabel={options.tabBarAccessibilityLabel}
         testID={options.tabBarTestID}
         onPress={onPress}
-        onLongPress={onLongPress}>
+        onLongPress={onLongPress}
+      >
         <TabBarIcons focused={isFocused} route={route} />
       </Pressable>
     </Animated.View>
@@ -181,7 +183,8 @@ export const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarPro
             `h-[${tabBarHeight}px]`,
           ),
         ],
-      })}>
+      })}
+    >
       <Animated.View style={tailwind.style('absolute inset-0 h-[1px] bg-blackA-A3')} />
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
