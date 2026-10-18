@@ -13,9 +13,9 @@ const minhaReserva = {
   telefone: '+5511999990000',
 };
 
-const pending = (accountId: number) => ({
+const pending = (accountId: number, arg?: 30 | 60 | 90 | 120) => ({
   type: ligacaoActions.fetchLigacoes.pending.type,
-  meta: { arg: undefined, requestId: 'r1', requestStatus: 'pending', accountId },
+  meta: { arg, requestId: 'r1', requestStatus: 'pending', accountId },
 });
 
 const fulfilled = (accountId: number, response: LigacaoListResponse) => ({
@@ -69,6 +69,35 @@ describe('ligacaoSlice', () => {
     expect(next.accountId).toBe(2);
     expect(next.leads).toEqual([]);
     expect(next.minhaReserva).toBeNull();
+    expect(next.janela).toBeNull();
+  });
+
+  it('pending with a window selects it before the response', () => {
+    const state = stateFor({ accountId: 1, janela: 30 });
+    const next = reducer(state, pending(1, 60));
+    expect(next.janela).toBe(60);
+    expect(next.isLoading).toBe(true);
+  });
+
+  it('pending without a window keeps the current one', () => {
+    const state = stateFor({ accountId: 1, janela: 90 });
+    expect(reducer(state, pending(1)).janela).toBe(90);
+  });
+
+  it('pending with a window for another account resets, then applies the requested window', () => {
+    const state = stateFor({ accountId: 1, leads: [mockLigacaoLead], janela: 90 });
+    const next = reducer(state, pending(2, 60));
+    expect(next.accountId).toBe(2);
+    expect(next.leads).toEqual([]);
+    expect(next.janela).toBe(60);
+  });
+
+  it('checkAccess pending never sets the window', () => {
+    const state = stateFor({ accountId: 1, janela: 90 });
+    const next = reducer(state, {
+      type: ligacaoActions.checkAccess.pending.type,
+      meta: { arg: undefined, requestId: 'r2', requestStatus: 'pending', accountId: 2 },
+    });
     expect(next.janela).toBeNull();
   });
 

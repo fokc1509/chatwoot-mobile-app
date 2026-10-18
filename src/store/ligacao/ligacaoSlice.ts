@@ -67,6 +67,13 @@ const ligacaoSlice = createSlice({
       .addMatcher(isAnyOf(...fetchActions.map(thunk => thunk.pending)), (state, action) => {
         switchAccount(state, (action.meta as { accountId: number | null }).accountId);
         state.isLoading = true;
+        // An explicit window is shown right away (the chip reflects the tap and
+        // a second tap is not re-requested); `undefined` waits for the server
+        // default. Applied after the account-switch reset on purpose: it is
+        // the window this very request asks for.
+        if (ligacaoActions.fetchLigacoes.pending.match(action) && action.meta.arg !== undefined) {
+          state.janela = action.meta.arg;
+        }
       })
       .addMatcher(isAnyOf(...fetchActions.map(thunk => thunk.fulfilled)), (state, action) => {
         const { accountId, response } = action.payload as LigacaoListPayload;

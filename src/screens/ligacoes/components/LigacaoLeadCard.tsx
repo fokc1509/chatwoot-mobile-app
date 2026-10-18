@@ -4,13 +4,13 @@ import { Text, View } from 'react-native';
 import I18n from '@/i18n';
 import { tailwind } from '@/theme';
 import type { LigacaoLead } from '@/store/ligacao/ligacaoTypes';
-import type { LigacaoCardView } from '../ligacaoViewModel';
+import { isWriteAction, type LigacaoCardView } from '../ligacaoViewModel';
 import { LigacaoButton } from './LigacaoButton';
 
 export interface LigacaoLeadCardProps {
   lead: LigacaoLead;
   view: LigacaoCardView;
-  /** True while any queue action is in flight (only one at a time). */
+  /** True while any queue action is in flight; locks only write actions. */
   actionsDisabled: boolean;
   onReservar: (lead: LigacaoLead) => void;
   onLigar: (lead: LigacaoLead, telefone: string | null) => void;
@@ -51,13 +51,13 @@ const MineSection = ({
         grow
         variant="primary"
         text={I18n.t('LIGACOES.ACTIONS.LIGAR')}
-        disabled={actionsDisabled}
+        disabled={actionsDisabled && isWriteAction('ligar')}
         onPress={() => onLigar(lead, view.telefone ?? null)}
       />
       <LigacaoButton
         grow
         text={I18n.t('LIGACOES.ACTIONS.ABRIR_CONVERSA')}
-        disabled={actionsDisabled}
+        disabled={actionsDisabled && isWriteAction('abrir')}
         onPress={() => onAbrir(lead)}
       />
     </View>
@@ -66,14 +66,14 @@ const MineSection = ({
         grow
         variant="success"
         text={I18n.t('LIGACOES.ACTIONS.PUXAR')}
-        disabled={actionsDisabled}
+        disabled={actionsDisabled && isWriteAction('puxar')}
         onPress={() => onPuxar(lead)}
       />
       <LigacaoButton
         grow
         variant="destructive"
         text={I18n.t('LIGACOES.ACTIONS.LIBERAR')}
-        disabled={actionsDisabled}
+        disabled={actionsDisabled && isWriteAction('liberar')}
         onPress={() => onLiberar(lead)}
       />
     </View>
@@ -113,7 +113,7 @@ const LigacaoLeadCardComponent = (props: LigacaoLeadCardProps) => {
           <LigacaoButton
             variant="primary"
             text={I18n.t('LIGACOES.ACTIONS.RESERVAR')}
-            disabled={view.state === 'disabled' || actionsDisabled}
+            disabled={view.state === 'disabled' || (actionsDisabled && isWriteAction('reservar'))}
             onPress={() => onReservar(lead)}
           />
         </View>

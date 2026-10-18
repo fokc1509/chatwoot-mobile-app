@@ -6,7 +6,9 @@ import {
   getCardView,
   getCvLabel,
   getTentativaLabel,
+  isWriteAction,
   normalizeResumo,
+  shouldShowInitialLoader,
 } from '../ligacaoViewModel';
 import type { LigacaoLead, LigacaoMinhaReserva } from '@/store/ligacao/ligacaoTypes';
 import { mockLigacaoLead, mockLigacaoLeadNulls } from '@/store/ligacao/specs/ligacaoMockData';
@@ -180,5 +182,33 @@ describe('respondeu label', () => {
   it('says "Respondeu agora" under a minute', () => {
     const view = getCardView(lead({ respondeu_at: '2026-10-18T16:59:50Z' }), null, NOW);
     expect(view.respondeuLabel).toBe('Respondeu agora');
+  });
+});
+
+describe('isWriteAction', () => {
+  it('locks only the actions that change the queue', () => {
+    expect(isWriteAction('reservar')).toBe(true);
+    expect(isWriteAction('puxar')).toBe(true);
+    expect(isWriteAction('liberar')).toBe(true);
+    expect(isWriteAction('ligar')).toBe(false);
+    expect(isWriteAction('abrir')).toBe(false);
+  });
+});
+
+describe('shouldShowInitialLoader', () => {
+  const base = { isLoading: true, isRefreshing: false, hasItems: false, janela: null };
+
+  it('shows the spinner on the first load of the account', () => {
+    expect(shouldShowInitialLoader(base)).toBe(true);
+  });
+
+  it('a poll over an already loaded empty queue keeps the empty state', () => {
+    expect(shouldShowInitialLoader({ ...base, janela: 30 })).toBe(false);
+  });
+
+  it('never while refreshing, with items, or when idle', () => {
+    expect(shouldShowInitialLoader({ ...base, isRefreshing: true })).toBe(false);
+    expect(shouldShowInitialLoader({ ...base, hasItems: true })).toBe(false);
+    expect(shouldShowInitialLoader({ ...base, isLoading: false })).toBe(false);
   });
 });

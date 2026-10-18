@@ -1,5 +1,13 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, StatusBar, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  AppState,
+  FlatList,
+  RefreshControl,
+  StatusBar,
+  Text,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -28,7 +36,7 @@ import { LigacaoFilters } from './components/LigacaoFilters';
 import { LigacaoLeadCard } from './components/LigacaoLeadCard';
 import { LigacaoResumoModal } from './components/LigacaoResumoModal';
 import { OrphanReservationBanner } from './components/OrphanReservationBanner';
-import { getCardView, normalizeResumo } from './ligacaoViewModel';
+import { getCardView, normalizeResumo, shouldShowInitialLoader } from './ligacaoViewModel';
 
 /** The queue changes when someone reserves/releases; 60 s keeps up without hammering. */
 const REFRESH_MS = 60000;
@@ -42,10 +50,11 @@ interface ResumoPendente {
   lead: string | null;
 }
 
+const errorMessage = (error: unknown): string =>
+  typeof error === 'string' && error ? error : I18n.t('LIGACOES.ERRORS.GENERIC');
+
 const toastError = (error: unknown) => {
-  showToast({
-    message: typeof error === 'string' && error ? error : I18n.t('LIGACOES.ERRORS.GENERIC'),
-  });
+  showToast({ message: errorMessage(error) });
 };
 
 const LigacoesScreen = () => {
@@ -64,20 +73,26 @@ const LigacoesScreen = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [resumo, setResumo] = useState<ResumoPendente | null>(null);
   const [isSavingResumo, setIsSavingResumo] = useState(false);
+  // Shown inside the summary modal: a toast would render under it.
+  const [resumoError, setResumoError] = useState<string | null>(null);
 
   // The poll must keep the selected window without re-arming the interval.
   const janelaRef = useRef(janela);
   janelaRef.current = janela;
 
   const janelas = janelasDoServidor.length ? janelasDoServidor : JANELAS_PADRAO;
-  // Only one item action at a time: any in-flight action locks every card.
+  // Only one write action at a time: any in-flight action locks every card's
+  // write buttons (Ligar / Abrir conversa stay available).
   const actionsDisabled = pendingDisplayId !== null;
 
   useFocusEffect(
     useCallback(() => {
       const fetch = () => dispatch(ligacaoActions.fetchLigacoes(janelaRef.current ?? undefined));
       fetch();
-      const interval = setInterval(fetch, REFRESH_MS);
+      // Android keeps JS timers running in background: skip those ticks.
+      const interval = setInterval(() => {
+        if (AppState.currentState === 'active') fetch();
+      }, REFRESH_MS);
       return () => clearInterval(interval);
     }, [dispatch]),
   );
@@ -97,7 +112,11 @@ const LigacoesScreen = () => {
 
   const handleJanela = useCallback(
     (dias: LigacaoJanela) => {
-      if (dias !== janelaRef.current) fetchWithFeedback(dias);
+      if (dias === janelaRef.current) return;
+      // The pending action already selects the chip; the ref also blocks a
+      // second tap that lands before the re-render.
+      janelaRef.current = dias;
+      fetchWithFeedback(dias);
     },
     [fetchWithFeedback],
   );
@@ -149,8 +168,9 @@ const LigacoesScreen = () => {
     (lead: LigacaoLead) => {
       dispatch(ligacaoActions.puxar(lead.display_id))
         .unwrap()
+        // No toast here: the summary modal opens at once and would cover it.
         .then(displayId => {
-          showToast({ message: I18n.t('LIGACOES.TOAST.PUXADO') });
+          setResumoError(null);
           setResumo({ displayId, lead: lead.lead });
         })
         .catch(toastError);
@@ -162,17 +182,20 @@ const LigacoesScreen = () => {
     (texto: string) => {
       if (!resumo || isSavingResumo) return;
       setIsSavingResumo(true);
+      setResumoError(null);
       dispatch(
         ligacaoActions.resumo({ displayId: resumo.displayId, texto: normalizeResumo(texto) }),
       )
         .unwrap()
         .then(() => {
           showToast({ message: I18n.t('LIGACOES.TOAST.RESUMO_SALVO') });
+          setResumoError(null);
           setResumo(null);
           openConversation(resumo.displayId);
         })
-        // A refused summary keeps the modal open with the text typed.
-        .catch(toastError)
+        // A refused summary keeps the modal open with the text typed and the
+        // error shown inline.
+        .catch(error => setResumoError(errorMessage(error)))
         .finally(() => setIsSavingResumo(false));
     },
     [dispatch, isSavingResumo, openConversation, resumo],
@@ -180,9 +203,12 @@ const LigacoesScreen = () => {
 
   const handleSkipResumo = useCallback(() => {
     if (!resumo || isSavingResumo) return;
+    setResumoError(null);
     setResumo(null);
     openConversation(resumo.displayId);
   }, [isSavingResumo, openConversation, resumo]);
+
+  const clearResumoError = useCallback(() => setResumoError(null), []);
 
   const items = useMemo(() => {
     const now = new Date();
@@ -205,7 +231,12 @@ const LigacoesScreen = () => {
     [actionsDisabled, handleAbrir, handleLiberarLead, handleLigar, handlePuxar, handleReservar],
   );
 
-  const showInitialLoader = isLoading && items.length === 0 && !isRefreshing;
+  const showInitialLoader = shouldShowInitialLoader({
+    isLoading,
+    isRefreshing,
+    hasItems: items.length > 0,
+    janela,
+  });
 
   return (
     <SafeAreaView edges={['top']} style={tailwind.style('flex-1 bg-white')}>
@@ -260,6 +291,8 @@ const LigacoesScreen = () => {
         visible={resumo !== null}
         leadNome={resumo?.lead ?? null}
         saving={isSavingResumo}
+        error={resumoError}
+        onClearError={clearResumoError}
         onSave={handleSaveResumo}
         onSkip={handleSkipResumo}
       />

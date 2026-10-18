@@ -11,6 +11,9 @@ interface LigacaoResumoModalProps {
   visible: boolean;
   leadNome: string | null;
   saving: boolean;
+  /** Save failure, rendered inline (a toast would sit under the modal). */
+  error: string | null;
+  onClearError: () => void;
   onSave: (texto: string) => void;
   onSkip: () => void;
 }
@@ -23,6 +26,8 @@ export const LigacaoResumoModal = ({
   visible,
   leadNome,
   saving,
+  error,
+  onClearError,
   onSave,
   onSkip,
 }: LigacaoResumoModalProps) => {
@@ -33,6 +38,11 @@ export const LigacaoResumoModal = ({
   }, [visible]);
 
   const podeSalvar = canSaveResumo(texto);
+
+  const handleChangeTexto = (value: string) => {
+    setTexto(value);
+    if (error) onClearError();
+  };
 
   // Android back acts as "Pular", except while saving or with text typed
   // (it would silently throw the summary away).
@@ -63,7 +73,7 @@ export const LigacaoResumoModal = ({
           ) : null}
           <TextInput
             value={texto}
-            onChangeText={setTexto}
+            onChangeText={handleChangeTexto}
             multiline
             autoFocus
             maxLength={RESUMO_MAX}
@@ -78,6 +88,11 @@ export const LigacaoResumoModal = ({
           <Text style={tailwind.style('mt-1 text-xs text-right text-gray-800')}>
             {I18n.t('LIGACOES.RESUMO.CONTADOR', { count: texto.length, max: RESUMO_MAX })}
           </Text>
+          {error ? (
+            <Text accessibilityRole="alert" style={tailwind.style('mt-2 text-sm text-ruby-800')}>
+              {error}
+            </Text>
+          ) : null}
           <View style={tailwind.style('mt-4 mb-4 flex-row gap-2')}>
             <LigacaoButton
               grow

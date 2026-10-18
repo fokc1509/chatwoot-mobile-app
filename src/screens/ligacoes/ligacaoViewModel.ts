@@ -141,3 +141,25 @@ export const getCardView = (
 export const canSaveResumo = (texto: string): boolean => texto.trim().length > 0;
 
 export const normalizeResumo = (texto: string): string => texto.trim().slice(0, RESUMO_MAX);
+
+/** Actions that change the queue on the server; only these lock while one is in flight. */
+const WRITE_ACTIONS: readonly LigacaoCardAction[] = ['reservar', 'puxar', 'liberar'];
+
+export const isWriteAction = (action: LigacaoCardAction): boolean => WRITE_ACTIONS.includes(action);
+
+/**
+ * Full-screen spinner only before the first response for the account
+ * (`janela` is null until then). Polls and pull-to-refresh keep the list —
+ * or the empty state — on screen instead of flashing the spinner.
+ */
+export const shouldShowInitialLoader = ({
+  isLoading,
+  isRefreshing,
+  hasItems,
+  janela,
+}: {
+  isLoading: boolean;
+  isRefreshing: boolean;
+  hasItems: boolean;
+  janela: number | null;
+}): boolean => isLoading && !isRefreshing && !hasItems && janela === null;
