@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import { NOTIFICATION_TYPES } from '@/constants';
 import { Notification } from '@/types/Notification';
+import type { PushPayload } from '@/store/settings/settingsTypes';
 
 let notifee: typeof import('@notifee/react-native').default | undefined;
 
@@ -67,3 +68,40 @@ export const findNotificationFromFCM = ({ message }: { message: FCMMessage }) =>
   }
   return notification;
 };
+
+// Builds the fcm subscription sent to the server. `app_id` tells cw-arqos to route this
+// subscription through Arqos's own Firebase; prefixing `device_id` with the app id keeps the
+// dev and production variants on the same phone (same vendor id) as distinct subscriptions.
+export function buildPushPayload({
+  appId,
+  fcmToken,
+  deviceId,
+  deviceName,
+  devicePlatform,
+  apiLevel,
+  brandName,
+  buildNumber,
+}: {
+  appId: string;
+  fcmToken: string;
+  deviceId: string;
+  deviceName: string;
+  devicePlatform: string;
+  apiLevel: string;
+  brandName: string;
+  buildNumber: string;
+}): PushPayload {
+  return {
+    subscription_type: 'fcm',
+    subscription_attributes: {
+      deviceName,
+      devicePlatform,
+      apiLevel,
+      brandName,
+      buildNumber,
+      push_token: fcmToken,
+      device_id: `${appId}:${deviceId}`,
+      app_id: appId,
+    },
+  };
+}

@@ -1,65 +1,67 @@
+// Expo transpiles only this file; this hook lets Node require the TypeScript module below.
+// sucrase ships with @expo/config, which is always installed alongside expo.
+import 'sucrase/register/ts';
 import { ConfigContext, ExpoConfig } from 'expo/config';
 
+import { getAppVariant } from './appVariant';
+
+// Projeto EAS: preencher após `eas init` (não é segredo). O eas-cli avalia esta config sem ler o
+// `.env`, por isso os valores ficam aqui; as variáveis de ambiente só servem para sobrescrever.
+const EAS_PROJECT_ID = '56e0eb7b-8c25-45c1-9508-51bc1e51082d';
+const EAS_OWNER = 'arqostis-team';
+
 export default ({ config }: ConfigContext): ExpoConfig => {
+  const variant = getAppVariant(process.env.APP_VARIANT);
+
   return {
-    name: 'Chatwoot',
-    slug: process.env.EXPO_PUBLIC_APP_SLUG || 'chatwoot-mobile',
+    name: variant.appName,
+    slug: 'arqos-atendimento',
     version: '4.4.0',
     orientation: 'portrait',
-    icon: './assets/icon.png',
+    icon: variant.isDev ? './assets/icon-dev.png' : './assets/icon.png',
     userInterfaceStyle: 'light',
     newArchEnabled: false,
-    scheme: 'chatwootapp',
+    scheme: variant.scheme,
     splash: {
       image: './assets/splash.png',
       resizeMode: 'contain',
-      backgroundColor: '#ffffff',
+      backgroundColor: '#E9E4DE',
       enableFullScreenImage_legacy: true,
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.chatwoot.app',
+      bundleIdentifier: variant.appId,
       infoPlist: {
-        NSCameraUsageDescription:
-          'This app requires access to the camera to upload images and videos.',
+        NSCameraUsageDescription: 'O app usa a câmera para enviar fotos e vídeos nas conversas.',
         NSPhotoLibraryUsageDescription:
-          'This app requires access to the photo library to upload images.',
-        NSMicrophoneUsageDescription: 'This app requires access to the microphone to record audio.',
+          'O app acessa a galeria de fotos para enviar imagens nas conversas.',
+        NSMicrophoneUsageDescription: 'O app usa o microfone para gravar mensagens de áudio.',
         NSAppleMusicUsageDescription:
-          'This app does not use Apple Music, but a system API may require this permission.',
+          'O app não usa o Apple Music, mas uma API do sistema pode exigir esta permissão.',
         UIBackgroundModes: ['fetch', 'remote-notification'],
         ITSAppUsesNonExemptEncryption: false,
       },
       // Please use the relative path to the google-services.json file
       googleServicesFile: process.env.EXPO_PUBLIC_IOS_GOOGLE_SERVICES_FILE,
       entitlements: { 'aps-environment': 'production' },
-      associatedDomains: ['applinks:app.chatwoot.com'],
     },
     android: {
-      adaptiveIcon: { foregroundImage: './assets/adaptive-icon.png', backgroundColor: '#ffffff' },
-      package: 'com.chatwoot.app',
+      adaptiveIcon: {
+        foregroundImage: variant.isDev
+          ? './assets/adaptive-icon-dev.png'
+          : './assets/adaptive-icon.png',
+        backgroundColor: '#E9E4DE',
+      },
+      package: variant.appId,
       permissions: ['android.permission.CAMERA', 'android.permission.RECORD_AUDIO'],
       // Please use the relative path to the google-services.json file
       googleServicesFile: process.env.EXPO_PUBLIC_ANDROID_GOOGLE_SERVICES_FILE,
       intentFilters: [
         {
           action: 'VIEW',
-          autoVerify: true,
           data: [
             {
-              scheme: 'https',
-              host: 'app.chatwoot.com',
-              pathPrefix: '/app/accounts/',
-              pathPattern: '/*/conversations/*',
-            },
-          ],
-          category: ['BROWSABLE', 'DEFAULT'],
-        },
-        {
-          action: 'VIEW',
-          data: [
-            {
-              scheme: 'chatwootapp',
+              scheme: variant.scheme,
             },
           ],
           category: ['BROWSABLE', 'DEFAULT'],
@@ -68,11 +70,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     extra: {
       eas: {
-        projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+        projectId: process.env.EXPO_PUBLIC_PROJECT_ID || EAS_PROJECT_ID || undefined,
         storybookEnabled: process.env.EXPO_STORYBOOK_ENABLED,
       },
+      appVariant: variant,
     },
-    owner: 'chatwoot',
+    owner: process.env.EXPO_OWNER || EAS_OWNER || undefined,
     plugins: [
       'expo-font',
       ['react-native-permissions', { iosPermissions: ['Camera', 'PhotoLibrary', 'MediaLibrary'] }],
@@ -101,6 +104,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ],
       './with-ffmpeg-pod.js',
     ],
-    androidNavigationBar: { backgroundColor: '#ffffff' },
+    androidNavigationBar: { backgroundColor: '#E9E4DE' },
   };
 };

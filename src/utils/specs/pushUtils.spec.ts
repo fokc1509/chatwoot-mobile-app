@@ -1,5 +1,9 @@
 import { transformNotification } from '../camelCaseKeys';
-import { findConversationLinkFromPush, findNotificationFromFCM } from '../pushUtils';
+import {
+  buildPushPayload,
+  findConversationLinkFromPush,
+  findNotificationFromFCM,
+} from '../pushUtils';
 
 describe('findNotificationFromFCM', () => {
   it('should return notification from FCM HTTP v1 message', () => {
@@ -115,5 +119,45 @@ describe('findConversationLinkFromPush', () => {
       installationUrl,
     });
     expect(result).toBe(undefined);
+  });
+});
+
+describe('buildPushPayload', () => {
+  const baseArgs = {
+    appId: 'br.com.arqos.atendimento',
+    fcmToken: 'tok',
+    deviceId: 'abc',
+    deviceName: 'Apple iPhone',
+    devicePlatform: 'iOS',
+    apiLevel: '17',
+    brandName: 'Apple',
+    buildNumber: '42',
+  };
+
+  it('builds an fcm subscription identified by the Arqos app id', () => {
+    const payload = buildPushPayload(baseArgs);
+    expect(payload).toEqual({
+      subscription_type: 'fcm',
+      subscription_attributes: {
+        app_id: 'br.com.arqos.atendimento',
+        device_id: 'br.com.arqos.atendimento:abc',
+        push_token: 'tok',
+        deviceName: 'Apple iPhone',
+        devicePlatform: 'iOS',
+        apiLevel: '17',
+        brandName: 'Apple',
+        buildNumber: '42',
+      },
+    });
+  });
+
+  it('gives dev and production installs on the same device distinct device ids', () => {
+    const production = buildPushPayload(baseArgs);
+    const dev = buildPushPayload({ ...baseArgs, appId: 'br.com.arqos.atendimento.dev' });
+    expect(dev.subscription_attributes.app_id).toBe('br.com.arqos.atendimento.dev');
+    expect(dev.subscription_attributes.device_id).toBe('br.com.arqos.atendimento.dev:abc');
+    expect(dev.subscription_attributes.device_id).not.toBe(
+      production.subscription_attributes.device_id,
+    );
   });
 });

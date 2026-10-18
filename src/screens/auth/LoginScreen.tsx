@@ -34,6 +34,7 @@ import { selectIsLoggingIn } from '@/store/auth/authSelectors';
 import { setLocale } from '@/store/settings/settingsSlice';
 import { useRefsContext } from '@/context/RefsContext';
 import { SsoUtils } from '@/utils/ssoUtils';
+import { getAppIdentity } from '@/utils/appIdentity';
 
 type FormData = {
   email: string;
@@ -103,9 +104,10 @@ const LoginScreen = () => {
     }
   };
 
-  // TODO: Change this condition based on EE check
-  // Show SSO login button only if installation URL contains app.chatwoot.com
-  const showSsoLogin = installationUrl.includes('app.chatwoot.com');
+  // SSO is opt-in per build (EXPO_PUBLIC_SSO_ENABLED=true)
+  const showSsoLogin = process.env.EXPO_PUBLIC_SSO_ENABLED === 'true';
+  // The server URL can only be changed in the development variant
+  const canChangeUrl = getAppIdentity().isDev;
 
   const openResetPassword = () => {
     navigation.navigate('ResetPassword' as never);
@@ -282,15 +284,20 @@ const LoginScreen = () => {
             handlePress={handleSubmit(onSubmit)}
           />
 
+          {canChangeUrl && (
+            <Pressable
+              style={tailwind.style('flex-row justify-center items-center mt-6')}
+              onPress={openConfigInstallationURL}>
+              <Animated.Text style={tailwind.style('text-sm text-gray-900')}>
+                {i18n.t('LOGIN.CHANGE_URL')}
+              </Animated.Text>
+            </Pressable>
+          )}
           <Pressable
-            style={tailwind.style('flex-row justify-center items-center mt-6')}
-            onPress={openConfigInstallationURL}>
-            <Animated.Text style={tailwind.style('text-sm text-gray-900')}>
-              {i18n.t('LOGIN.CHANGE_URL')}
-            </Animated.Text>
-          </Pressable>
-          <Pressable
-            style={tailwind.style('flex-row justify-center items-center mt-4')}
+            style={tailwind.style(
+              'flex-row justify-center items-center',
+              canChangeUrl ? 'mt-4' : 'mt-6',
+            )}
             onPress={() => languagesModalSheetRef.current?.present()}>
             <Animated.Text style={tailwind.style('text-sm text-gray-900')}>
               {i18n.t('LOGIN.CHANGE_LANGUAGE')}

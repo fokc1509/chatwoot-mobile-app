@@ -18,12 +18,13 @@ import type {
   NotificationSettings,
   NotificationSettingsPayload,
   InstallationUrls,
-  PushPayload,
 } from './settingsTypes';
 import I18n from '@/i18n';
 import { URL_TYPE } from '@/constants/url';
 import { checkValidUrl, extractDomain, handleApiError } from './settingsUtils';
 import { showToast } from '@/utils/toastUtils';
+import { buildPushPayload } from '@/utils/pushUtils';
+import { getAppIdentity } from '@/utils/appIdentity';
 
 const createSettingsThunk = <TResponse, TPayload>(
   type: string,
@@ -114,18 +115,16 @@ export const settingsActions = {
         await sleep(1000);
         const fcmToken = await messaging().getToken();
 
-        const pushData: PushPayload = {
-          subscription_type: 'fcm',
-          subscription_attributes: {
-            deviceName,
-            devicePlatform,
-            apiLevel: apiLevel.toString(),
-            brandName,
-            buildNumber,
-            push_token: fcmToken,
-            device_id: deviceId,
-          },
-        };
+        const pushData = buildPushPayload({
+          appId: getAppIdentity().appId,
+          fcmToken,
+          deviceId,
+          deviceName,
+          devicePlatform,
+          apiLevel: apiLevel.toString(),
+          brandName,
+          buildNumber,
+        });
         await SettingsService.saveDeviceDetails(pushData);
         return { fcmToken };
       } catch (error) {

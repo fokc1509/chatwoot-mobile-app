@@ -20,14 +20,14 @@ interface SettingsState {
   pushToken: string;
 }
 const initialState: SettingsState = {
-  baseUrl: 'app.chatwoot.com',
-  installationUrl: 'https://app.chatwoot.com/',
+  baseUrl: 'atendimento.arqos.online',
+  installationUrl: 'https://atendimento.arqos.online/',
   uiFlags: {
     isSettingUrl: false,
     isUpdating: false,
     isLocaleSet: false,
   },
-  localeValue: 'en',
+  localeValue: 'pt_BR',
   notificationSettings: {
     account_id: 0,
     all_email_flags: [],
@@ -37,7 +37,7 @@ const initialState: SettingsState = {
     selected_push_flags: [],
     user_id: 0,
   },
-  webSocketUrl: 'wss://app.chatwoot.com/cable',
+  webSocketUrl: 'wss://atendimento.arqos.online/cable',
   theme: 'system',
   version: '',
   pushToken: '',

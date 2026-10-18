@@ -15,7 +15,8 @@ import { findConversationLinkFromPush, findNotificationFromFCM } from '@/utils/p
 import { extractConversationIdFromUrl } from '@/utils/conversationUtils';
 import { useAppSelector } from '@/hooks';
 import { selectInstallationUrl, selectLocale } from '@/store/settings/settingsSelectors';
-import { SSO_CALLBACK_URL } from '@/constants';
+import { getAppIdentity } from '@/utils/appIdentity';
+import { getSsoCallbackUrl } from '@/utils/ssoUrls';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RefsProvider } from '@/context';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -47,8 +48,11 @@ export const AppNavigationContainer = () => {
   const installationUrl = useAppSelector(selectInstallationUrl);
   const locale = useAppSelector(selectLocale);
 
+  const { scheme } = getAppIdentity();
+  const ssoCallbackUrl = getSsoCallbackUrl(scheme);
+
   const linking = {
-    prefixes: [installationUrl, SSO_CALLBACK_URL],
+    prefixes: [installationUrl, ssoCallbackUrl],
     config: {
       screens: {
         ChatScreen: {
@@ -65,8 +69,8 @@ export const AppNavigationContainer = () => {
     // getStateFromPath: App running, receives deep link - handles SSO callbacks and conversation navigation
     getStateFromPath: (path: string, config: any) => {
       // Handle SSO callback - App running, receives deep link
-      if (path.includes(SSO_CALLBACK_URL) || path.includes('auth/saml')) {
-        const ssoParams = SsoUtils.parseCallbackUrl(`chatwootapp://${path}`);
+      if (path.includes(ssoCallbackUrl) || path.includes('auth/saml')) {
+        const ssoParams = SsoUtils.parseCallbackUrl(`${scheme}://${path}`);
         // Handle both success and error cases
         SsoUtils.handleSsoCallback(ssoParams, dispatch);
         // Return undefined to prevent navigation change for SSO callback
@@ -111,7 +115,7 @@ export const AppNavigationContainer = () => {
 
       if (url != null) {
         // Handle SSO callback - App starting up from deep link
-        if (url.includes(SSO_CALLBACK_URL)) {
+        if (url.includes(ssoCallbackUrl)) {
           const ssoParams = SsoUtils.parseCallbackUrl(url);
           // Handle both success and error cases
           SsoUtils.handleSsoCallback(ssoParams, dispatch);
@@ -139,7 +143,7 @@ export const AppNavigationContainer = () => {
     subscribe(listener: (arg0: string) => void) {
       const onReceiveURL = ({ url }: { url: string }) => {
         // Handle SSO callback - App backgrounded, receives deep link
-        if (url.includes(SSO_CALLBACK_URL)) {
+        if (url.includes(ssoCallbackUrl)) {
           const ssoParams = SsoUtils.parseCallbackUrl(url);
           // Handle both success and error cases
           SsoUtils.handleSsoCallback(ssoParams, dispatch);
