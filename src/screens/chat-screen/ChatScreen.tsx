@@ -35,6 +35,8 @@ import { MacrosList } from './components/macros/MacrosList';
 import { macroActions } from '@/store/macro/macroActions';
 import { selectInboxById } from '@/store/inbox/inboxSelectors';
 import { metaTemplateActions } from '@/store/meta-template/metaTemplateActions';
+import { isCommercialInbox } from '@/store/attendance/attendanceRules';
+import { ApprovalBanner } from './components/attendance/ApprovalBanner';
 
 export const ChatWindow = (props: ChatScreenProps) => {
   return (
@@ -98,6 +100,9 @@ const ChatScreenWrapper = (props: ChatScreenProps) => {
   return (
     <React.Fragment>
       <ChatHeaderContainer name={name || ''} imageSrc={{ uri: thumbnail || '' }} />
+      {isCommercialInbox(inbox) ? (
+        <ApprovalBanner key={conversationId} conversationId={conversationId} />
+      ) : null}
       <ConversationPagerView {...props} />
     </React.Fragment>
   );

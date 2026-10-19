@@ -680,6 +680,13 @@
       "CONFIRM": "Start",
       "SUCCESS": "You have 1 hour to send the message to the customer"
     },
+    "APPROVAL": {
+      "ADIAMENTO_TITLE": "Approval pending — 15-day postponement",
+      "DESCARTE_TITLE": "Approval pending — discard the lead",
+      "SOLICITANTE": "Requested by %{nome}",
+      "MOTIVO": "Reason: %{motivo}",
+      "BUCKET": "Bucket: %{bucket}"
+    },
     "MENU": {
       "DESCARTAR": "Discard",
       "ADIAR": "Postpone contact?",
