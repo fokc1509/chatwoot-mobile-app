@@ -49,6 +49,12 @@ describe('metaTemplateSlice', () => {
     expect(state.byInbox[5]).toEqual({ templates: [], access: false, isLoading: false });
   });
 
+  it('treats 404 (inbox without Meta credential) as no access', () => {
+    let state = reducer(initialState, pending(5));
+    state = reducer(state, rejected(5, 404));
+    expect(state.byInbox[5]).toEqual({ templates: [], access: false, isLoading: false });
+  });
+
   it('keeps access and list on other failures', () => {
     let state = reducer(initialState, fulfilled(5));
     state = reducer(state, pending(5));

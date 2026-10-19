@@ -64,11 +64,13 @@ type ErrorWithResponse = {
 };
 
 // send_template_to_webhook answers in English (cw-arqos InboxesController): 422 from
-// TemplateWebhookSender::ConfigurationError and 502 "Webhook returned: …". Brokers get pt-BR;
+// TemplateWebhookSender::ConfigurationError, 502 "Webhook returned: …" and 400
+// "Webhook execution failed: …" (timeouts/connection errors). Brokers get pt-BR;
 // any other server text is shown as-is.
 const TRANSLATED_ERRORS: { prefix: string; key: string }[] = [
   { prefix: 'Webhook URL not configured', key: 'META_TEMPLATES.ERRORS.WEBHOOK_NOT_CONFIGURED' },
   { prefix: 'Webhook returned', key: 'META_TEMPLATES.ERRORS.WEBHOOK_FAILED' },
+  { prefix: 'Webhook execution failed', key: 'META_TEMPLATES.ERRORS.WEBHOOK_FAILED' },
 ];
 
 export const getTemplateErrorMessage = (error: unknown): string => {

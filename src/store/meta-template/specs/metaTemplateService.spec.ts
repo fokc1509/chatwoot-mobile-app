@@ -136,6 +136,14 @@ describe('getTemplateErrorMessage', () => {
     ).toBe('META_TEMPLATES.ERRORS.WEBHOOK_FAILED');
   });
 
+  it('maps the 400 "Webhook execution failed: …" error to WEBHOOK_FAILED', () => {
+    expect(
+      getTemplateErrorMessage({
+        response: { status: 400, data: { error: 'Webhook execution failed: execution expired' } },
+      }),
+    ).toBe('META_TEMPLATES.ERRORS.WEBHOOK_FAILED');
+  });
+
   it('returns the generic key without a usable error string', () => {
     expect(getTemplateErrorMessage({ response: { status: 422, data: { error: '' } } })).toBe(
       'META_TEMPLATES.ERRORS.GENERIC',

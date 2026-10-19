@@ -84,6 +84,17 @@ describe('metaTemplateActions', () => {
       expect(store.getState().metaTemplates.byInbox[INBOX_ID].access).toBe(false);
     });
 
+    it('hides the button on 404 (Meta enabled but no credential)', async () => {
+      mockedService.list.mockRejectedValue(httpError(404));
+      const { store, inbox } = setupStore({ enabled: true });
+
+      await store.dispatch(metaTemplateActions.fetchTemplates(INBOX_ID));
+
+      const entry = store.getState().metaTemplates.byInbox[INBOX_ID];
+      expect(entry.access).toBe(false);
+      expect(shouldShowTemplateButton(inbox, entry.access, false)).toBe(false);
+    });
+
     it('keeps the last known access on network errors and 5xx', async () => {
       const { store } = setupStore({ enabled: true });
       mockedService.list.mockRejectedValueOnce(new Error('Network Error'));

@@ -42,7 +42,7 @@ const fetchTemplates = createAsyncThunk<
 });
 
 export const metaTemplateActions = {
-  /** 2xx → access=true + visible list; 401/403 → access=false (button hidden). */
+  /** 2xx → access=true + visible list; 401/403/404 → access=false (button hidden). */
   fetchTemplates,
 
   /** Pulls templates from Meta, then refetches the list (also after a failure). */

@@ -60,7 +60,11 @@ export const ReplyWarning = (props: ReplyWarningProps) => {
 
   return (
     <Pressable
-      style={tailwind.style('flex flex-row items-center px-4 py-3 max-h-[64px] bg-ruby-700 -z-10')}>
+      style={tailwind.style(
+        'flex flex-row items-center px-4 py-3 bg-ruby-700 -z-10',
+        // The template button narrows the text column: let the row grow instead of clipping.
+        onPressTemplate ? '' : 'max-h-[64px]',
+      )}>
       <Animated.View style={tailwind.style('flex-1')}>
         <Animated.Text
           style={tailwind.style(

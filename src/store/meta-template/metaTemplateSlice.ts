@@ -9,8 +9,10 @@ export const initialState: MetaTemplateState = {
   empreendimentos: [],
 };
 
-// Permission denials (custom role without `meta_template_view`).
-const DENIED_STATUSES = [401, 403];
+// Permission denials (custom role without `meta_template_view`), plus 404: the inbox has
+// Meta enabled but no meta_credential (MetaTemplatesController heads :not_found), so
+// there is nothing to list or send — hide the button instead of a dead-end picker.
+const DENIED_STATUSES = [401, 403, 404];
 
 const entryFor = (state: MetaTemplateState, inboxId: number): MetaTemplateInboxState => {
   if (!state.byInbox[inboxId]) {

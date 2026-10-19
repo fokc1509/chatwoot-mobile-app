@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -99,6 +99,22 @@ const FillForm = ({ navigation, route, template }: FillFormProps) => {
   );
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Synchronous latch: a same-tick double tap runs before isSending re-renders.
+  const sendingRef = useRef(false);
+
+  // Leaving mid-send (the proxy may take up to 20 s) would let the result land on whatever
+  // screen is on top. Block header/hardware back while the latch is set...
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', event => {
+        if (sendingRef.current) event.preventDefault();
+      }),
+    [navigation],
+  );
+  // ...and the iOS swipe, which beforeRemove cannot stop on a native stack.
+  useEffect(() => {
+    navigation.setOptions({ gestureEnabled: !isSending });
+  }, [navigation, isSending]);
 
   // Typing again clears the last send error.
   const edit = (apply: (value: string) => void) => (value: string) => {
@@ -129,7 +145,8 @@ const FillForm = ({ navigation, route, template }: FillFormProps) => {
   const isMedia = header.format === 'IMAGE' || header.format === 'VIDEO';
 
   const handleSend = async () => {
-    if (!ready || isSending) return;
+    if (!ready || sendingRef.current) return;
+    sendingRef.current = true;
     setError(null);
     setIsSending(true);
     try {
@@ -153,9 +170,18 @@ const FillForm = ({ navigation, route, template }: FillFormProps) => {
       await MetaTemplateService.sendToWebhook(inboxId, payload);
       if (quoteMessage) dispatch(setQuoteMessage(null));
       showToast({ message: I18n.t('META_TEMPLATES.SENT') });
-      // Fill sits on top of the picker: go straight back to the conversation.
-      navigation.pop(2);
+      // Release the latch first so beforeRemove lets our own pop through.
+      sendingRef.current = false;
+      if (navigation.isFocused()) {
+        // Fill sits on top of the picker: go straight back to the conversation.
+        navigation.pop(2);
+      } else {
+        // Something else was pushed on top: don't pop it. The form stays disabled (already
+        // sent) but can be left normally.
+        navigation.setOptions({ gestureEnabled: true });
+      }
     } catch (sendError) {
+      sendingRef.current = false;
       // Shown on the screen, form kept as typed.
       setError(getTemplateErrorMessage(sendError));
       setIsSending(false);
