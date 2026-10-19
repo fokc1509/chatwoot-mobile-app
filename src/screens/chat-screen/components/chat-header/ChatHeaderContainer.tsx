@@ -16,6 +16,9 @@ import { evaluateSLAStatus } from '@chatwoot/utils';
 import { resetSentMessage } from '@/store/conversation/sendMessageSlice';
 import { selectAllDashboardApps } from '@/store/dashboard-app/dashboardAppSlice';
 import { selectUser } from '@/store/auth/authSelectors';
+import { selectInboxById } from '@/store/inbox/inboxSelectors';
+import { ATTENDANCE_MENU_FLOWS, attendanceMenuItems } from '@/store/attendance/attendanceMenu';
+import { useAttendanceFlow } from '../attendance/AttendanceFlowHost';
 
 type ChatScreenHeaderProps = {
   name: string;
@@ -32,6 +35,10 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
   const conversation = useAppSelector(state => selectConversationById(state, conversationId));
   const currentUser = useAppSelector(selectUser);
   const dashboardApps = useAppSelector(selectAllDashboardApps);
+  const inbox = useAppSelector(state =>
+    conversation ? selectInboxById(state, conversation.inboxId) : undefined,
+  );
+  const attendanceFlow = useAttendanceFlow();
 
   const appliedSla = conversation?.appliedSla;
 
@@ -41,6 +48,9 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
 
   const conversationStatus = conversation?.status;
   const isResolved = conversationStatus === CONVERSATION_STATUS.RESOLVED;
+  // Commercial inbox: the resolve button becomes Descartar (reopen stays as is).
+  const isDiscardAction =
+    !isResolved && attendanceMenuItems({ inbox, status: conversationStatus }) !== null;
 
   const updateSlaStatus = useCallback(() => {
     if (appliedSla) {
@@ -116,6 +126,10 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
   };
 
   const toggleChatStatus = async () => {
+    if (isDiscardAction) {
+      attendanceFlow.open(ATTENDANCE_MENU_FLOWS.descartar, { conversationId });
+      return;
+    }
     const updatedStatus =
       conversationStatus === CONVERSATION_STATUS.RESOLVED
         ? CONVERSATION_STATUS.OPEN
@@ -163,6 +177,7 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
       name={name}
       imageSrc={imageSrc}
       isResolved={isResolved}
+      isDiscardAction={isDiscardAction}
       dashboardsList={dashboardsList}
       isSlaMissed={slaStatus?.isSlaMissed}
       hasSla={!!appliedSla}

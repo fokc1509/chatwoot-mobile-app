@@ -679,6 +679,11 @@
       "DESC": "You will have 1 hour to send a message or template to the customer. Start?",
       "CONFIRM": "Start",
       "SUCCESS": "You have 1 hour to send the message to the customer"
+    },
+    "MENU": {
+      "DESCARTAR": "Discard",
+      "ADIAR": "Postpone contact?",
+      "IA": "AI attendance"
     }
   }
 }

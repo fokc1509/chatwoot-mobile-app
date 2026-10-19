@@ -28,6 +28,13 @@ import { selectAllTeams } from '@/store/team/teamSelectors';
 import { selectInstallationUrl } from '@/store/settings/settingsSelectors';
 import { ConversationMetaInformation } from './components/ConversationMetaInformation';
 import { selectConversationParticipantsByConversationId } from '@/store/conversation-participant/conversationParticipantSelectors';
+import { selectInboxById } from '@/store/inbox/inboxSelectors';
+import {
+  ATTENDANCE_MENU_FLOWS,
+  AttendanceMenuItem,
+  attendanceMenuItems,
+} from '@/store/attendance/attendanceMenu';
+import { useAttendanceFlow } from '../components/attendance/AttendanceFlowHost';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 
@@ -45,6 +52,10 @@ export const ConversationActions = () => {
   const conversation = useAppSelector(state => selectConversationById(state, conversationId));
 
   const installationUrl = useAppSelector(selectInstallationUrl);
+  const inbox = useAppSelector(state =>
+    conversation ? selectInboxById(state, conversation.inboxId) : undefined,
+  );
+  const attendanceFlow = useAttendanceFlow();
 
   const { status, muted: isMuted, meta, priority = null } = conversation || {};
   const { assignee, team } = meta || {};
@@ -93,6 +104,11 @@ export const ConversationActions = () => {
     }
   };
 
+  const attendanceItems = attendanceMenuItems({ inbox, status });
+  const onAttendanceAction = (item: AttendanceMenuItem) => {
+    attendanceFlow.open(ATTENDANCE_MENU_FLOWS[item], { conversationId });
+  };
+
   const onChangeAssignee = () => {
     if (!conversation) return;
     dispatch(selectSingleConversation(conversation));
@@ -129,6 +145,8 @@ export const ConversationActions = () => {
           status={status}
           updateConversationStatus={updateConversationStatus}
           isMuted={isMuted || false}
+          attendanceItems={attendanceItems}
+          onAttendanceAction={onAttendanceAction}
         />
         <Animated.View style={tailwind.style('pt-10')}>
           <ConversationSettingsPanel

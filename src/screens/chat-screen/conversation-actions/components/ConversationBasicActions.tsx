@@ -8,10 +8,18 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Icon } from '@/components-next';
-import { OpenIcon, ResolvedFilledIcon, PendingFilledIcon, SnoozedFilledIcon } from '@/svg-icons';
+import {
+  OpenIcon,
+  ResolvedFilledIcon,
+  PendingFilledIcon,
+  SnoozedFilledIcon,
+  Trash,
+} from '@/svg-icons';
 import { tailwind } from '@/theme';
 import { useHaptic, useScaleAnimation } from '@/utils';
 import { ConversationStatus } from '@/types';
+import i18n from '@/i18n';
+import type { AttendanceMenuItem } from '@/store/attendance/attendanceMenu';
 
 import { ConversationActionType } from '../ConversationActions';
 
@@ -24,6 +32,9 @@ type ConversationActionOptionsType = {
   actionIcon: React.JSX.Element;
   actionText: ConversationStateType;
   actionStatus: ConversationStatus | 'open';
+  /** Commercial inbox item: opens the attendance flow instead of changing the status. */
+  attendanceItem?: AttendanceMenuItem;
+  label?: string;
 };
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
@@ -64,21 +75,80 @@ const conversationActionOptions: ConversationActionOptionsType[] = [
   },
 ];
 
+const attendanceActionOptions: Record<AttendanceMenuItem, ConversationActionOptionsType> = {
+  descartar: {
+    backgroundActionColor: 'bg-ruby-100',
+    backgroundActionPressedColor: 'bg-ruby-200',
+    borderActionColor: 'bg-ruby-700',
+    actionIcon: <Trash />,
+    actionText: 'resolve',
+    actionStatus: 'resolved',
+    attendanceItem: 'descartar',
+  },
+  adiar: {
+    backgroundActionColor: 'bg-indigo-100',
+    backgroundActionPressedColor: 'bg-indigo-200',
+    borderActionColor: 'bg-indigo-700',
+    actionIcon: <SnoozedFilledIcon />,
+    actionText: 'snooze',
+    actionStatus: 'snoozed',
+    attendanceItem: 'adiar',
+  },
+  ia: {
+    backgroundActionColor: 'bg-amber-100',
+    backgroundActionPressedColor: 'bg-amber-200',
+    borderActionColor: 'bg-amber-700',
+    actionIcon: <PendingFilledIcon />,
+    actionText: 'pending',
+    actionStatus: 'pending',
+    attendanceItem: 'ia',
+  },
+};
+
+const ATTENDANCE_LABEL_KEYS: Record<AttendanceMenuItem, string> = {
+  descartar: 'ATTENDANCE.MENU.DESCARTAR',
+  adiar: 'ATTENDANCE.MENU.ADIAR',
+  ia: 'ATTENDANCE.MENU.IA',
+};
+
+// Commercial inbox: "open" stays, the other status items become the attendance items.
+const buildAttendanceOptions = (items: AttendanceMenuItem[]): ConversationActionOptionsType[] => [
+  conversationActionOptions[0],
+  ...items.map(item => ({
+    ...attendanceActionOptions[item],
+    label: i18n.t(ATTENDANCE_LABEL_KEYS[item]),
+  })),
+];
+
 type ConversationActionOptionProps = {
   index: number;
+  optionsCount: number;
   conversationAction: ConversationActionOptionsType;
   status: ConversationStatus | undefined;
   isMuted: boolean | false;
   updateConversationStatus: (type: ConversationActionType, status?: ConversationStatus) => void;
+  onAttendanceAction?: (item: AttendanceMenuItem) => void;
 };
 
 const ConversationActionOption = (props: ConversationActionOptionProps) => {
-  const { index, conversationAction, status, updateConversationStatus, isMuted } = props;
+  const {
+    index,
+    optionsCount,
+    conversationAction,
+    status,
+    updateConversationStatus,
+    isMuted,
+    onAttendanceAction,
+  } = props;
 
   const hapticSelection = useHaptic();
 
   const handleActionOptionPress = () => {
     hapticSelection?.();
+    if (conversationAction.attendanceItem) {
+      onAttendanceAction?.(conversationAction.attendanceItem);
+      return;
+    }
     updateConversationStatus('status', conversationAction.actionStatus as ConversationStatus);
   };
   const actionActive = useSharedValue(0);
@@ -86,7 +156,8 @@ const ConversationActionOption = (props: ConversationActionOptionProps) => {
   const { handlers, animatedStyle } = useScaleAnimation();
 
   useEffect(() => {
-    if (conversationAction.actionStatus === status) {
+    // Attendance items are actions, not statuses: never shown as the current one.
+    if (!conversationAction.attendanceItem && conversationAction.actionStatus === status) {
       actionActive.value = withSpring(1);
     } else {
       actionActive.value = withSpring(0);
@@ -95,6 +166,7 @@ const ConversationActionOption = (props: ConversationActionOptionProps) => {
     actionActive,
     conversationAction.actionStatus,
     conversationAction.actionText,
+    conversationAction.attendanceItem,
     status,
     isMuted,
   ]);
@@ -109,10 +181,7 @@ const ConversationActionOption = (props: ConversationActionOptionProps) => {
 
   return (
     <Animated.View
-      style={[
-        tailwind.style('flex-1', index !== conversationActionOptions.length - 1 ? 'mr-3' : ''),
-        animatedStyle,
-      ]}>
+      style={[tailwind.style('flex-1', index !== optionsCount - 1 ? 'mr-3' : ''), animatedStyle]}>
       <Pressable
         key={index}
         style={({ pressed }) => [
@@ -134,9 +203,10 @@ const ConversationActionOption = (props: ConversationActionOptionProps) => {
         <Icon icon={conversationAction.actionIcon} size={32} />
         <Animated.Text
           style={tailwind.style(
-            'text-md font-inter-normal-20 leading-[17px] tracking-[0.32px] text-center pt-5 capitalize text-gray-950 ',
+            'text-md font-inter-normal-20 leading-[17px] tracking-[0.32px] text-center pt-5 text-gray-950 ',
+            conversationAction.label ? '' : 'capitalize',
           )}>
-          {conversationAction.actionText}
+          {conversationAction.label ?? conversationAction.actionText}
         </Animated.Text>
       </Pressable>
     </Animated.View>
@@ -147,16 +217,24 @@ type ConversationBasicActionsProps = {
   status: ConversationStatus | undefined;
   updateConversationStatus: (type: ConversationActionType, status?: ConversationStatus) => void;
   isMuted: boolean | false;
+  /** From attendanceMenuItems: null/undefined keeps the default status items. */
+  attendanceItems?: AttendanceMenuItem[] | null;
+  onAttendanceAction?: (item: AttendanceMenuItem) => void;
 };
 
 export const ConversationBasicActions = (props: ConversationBasicActionsProps) => {
-  const { status, updateConversationStatus, isMuted } = props;
+  const { status, updateConversationStatus, isMuted, attendanceItems, onAttendanceAction } = props;
+  const options = attendanceItems
+    ? buildAttendanceOptions(attendanceItems)
+    : conversationActionOptions;
 
   return (
     <Animated.View style={tailwind.style('flex flex-row justify-around px-4 pt-5')}>
-      {conversationActionOptions.map((conversationAction, index) => (
+      {options.map((conversationAction, index) => (
         <ConversationActionOption
           key={index}
+          optionsCount={options.length}
+          onAttendanceAction={onAttendanceAction}
           conversationAction={conversationAction}
           status={status}
           isMuted={isMuted}

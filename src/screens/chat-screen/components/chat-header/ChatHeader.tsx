@@ -4,7 +4,7 @@ import { BottomSheetModal, useBottomSheetSpringConfigs } from '@gorhom/bottom-sh
 import Animated from 'react-native-reanimated';
 
 import { Avatar, Icon } from '@/components-next';
-import { ChevronLeft, OpenIcon, Overflow, ResolvedIcon, SLAIcon } from '@/svg-icons';
+import { ChevronLeft, OpenIcon, Overflow, ResolvedIcon, SLAIcon, Trash } from '@/svg-icons';
 import { BottomSheetBackdrop, BottomSheetWrapper } from '@/components-next';
 import { tailwind } from '@/theme';
 import { ChatDropdownMenu, DashboardList } from './DropdownMenu';
@@ -16,6 +16,8 @@ type ChatHeaderProps = {
   name: string;
   imageSrc: ImageSourcePropType;
   isResolved: boolean;
+  /** Commercial inbox: the resolve button opens the Descartar flow. */
+  isDiscardAction?: boolean;
   isSlaMissed?: boolean;
   hasSla?: boolean;
   slaEvents?: SLAEvent[];
@@ -30,6 +32,7 @@ export const ChatHeader = ({
   name,
   imageSrc,
   isResolved,
+  isDiscardAction = false,
   slaEvents,
   isSlaMissed,
   hasSla,
@@ -93,7 +96,9 @@ export const ChatHeader = ({
             <Pressable hitSlop={8} onPress={onToggleChatStatus}>
               <Icon
                 icon={
-                  isResolved ? (
+                  isDiscardAction ? (
+                    <Trash />
+                  ) : isResolved ? (
                     <ResolvedIcon strokeWidth={2} stroke={tailwind.color('bg-green-700')} />
                   ) : (
                     <OpenIcon strokeWidth={2} />

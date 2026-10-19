@@ -640,6 +640,11 @@
       "DESC": "Você terá 1 hora para enviar uma mensagem ou template ao cliente. Iniciar?",
       "CONFIRM": "Iniciar",
       "SUCCESS": "Você tem 1 hora para enviar a mensagem ao cliente"
+    },
+    "MENU": {
+      "DESCARTAR": "Descartar",
+      "ADIAR": "Adiar contato?",
+      "IA": "Atendimento IA"
     }
   }
 }
