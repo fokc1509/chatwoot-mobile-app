@@ -264,7 +264,6 @@
       }
     }
   },
-
   "FILTER": {
     "ALL_INBOXES": "All inboxes",
     "FILTER_BY_ASSIGNEE_TYPE": "Filter by assignee type",
@@ -572,8 +571,61 @@
     "BUTTON": "Templates",
     "SEND_TEMPLATE": "Send template",
     "PICKER_TITLE": "Templates",
+    "FILL_TITLE": "Fill template",
+    "BACK": "Back",
+    "REFRESH_SHORT": "Refresh",
+    "BADGE": {
+      "IMAGE": "Image",
+      "VIDEO": "Video",
+      "DOCUMENT": "Document"
+    },
+    "SEARCH_PLACEHOLDER": "Search templates by name",
+    "REFRESH": "Refresh templates",
+    "FILTERS": {
+      "ALL": "All",
+      "CATEGORY": "Category",
+      "DEFINITION": "Definition",
+      "OPERATION": "Operation",
+      "TYPE": "Type"
+    },
+    "EMPTY": {
+      "NO_ACCESS": "You are not allowed to send templates in this inbox.",
+      "NO_TEMPLATES": "No templates available in this inbox. Tap refresh to fetch them from Meta.",
+      "NO_MATCH": "No templates match these filters.",
+      "TEMPLATE_GONE": "This template is no longer available. Go back and pick another one."
+    },
+    "PREVIEW": "Preview",
+    "HEADER": {
+      "IMAGE": "Header image",
+      "VIDEO": "Header video",
+      "DOCUMENT": "Header document",
+      "TEXT": "Header variables",
+      "LIBRARY": "Media library",
+      "LIBRARY_EMPTY": "No media in this library folder.",
+      "LIBRARY_ERROR": "Could not load the library. Paste the URL below.",
+      "RETRY": "Try again",
+      "MEDIA_URL": "Media URL",
+      "DOCUMENT_URL": "Document URL",
+      "DOCUMENT_NAME": "File name (optional)",
+      "SELECTED": "Selected"
+    },
+    "VARIABLES": "Variables",
+    "CONTACT_NAME": "Contact name",
+    "OTHER_VALUE": "Other value",
+    "NO_CONTACT_NAME": "Contact has no name",
+    "SELECT_PLACEHOLDER": "Choose a development",
+    "VALUE_PLACEHOLDER": "Type the value of %{variable}",
+    "BUTTON_PARAMS": "Button parameters",
+    "BUTTON_PARAM": "Button %{n} parameter",
+    "SEND": "Send",
+    "SENDING": "Sending…",
+    "REQUIRED_HINT": "Fill in every field to send.",
+    "SENT": "Template sent",
     "ERRORS": {
-      "GENERIC": "Could not send the template. Please try again."
+      "GENERIC": "Could not send the template. Please try again.",
+      "WEBHOOK_NOT_CONFIGURED": "This inbox is not set up to send templates.",
+      "WEBHOOK_FAILED": "The template sending service failed. Please try again.",
+      "SYNC": "Could not refresh the templates. Please try again."
     }
   }
 }

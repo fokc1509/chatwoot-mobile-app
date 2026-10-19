@@ -63,11 +63,20 @@ type ErrorWithResponse = {
   response?: { data?: { error?: unknown } };
 };
 
+// send_template_to_webhook answers in English (cw-arqos InboxesController): 422 from
+// TemplateWebhookSender::ConfigurationError and 502 "Webhook returned: …". Brokers get pt-BR;
+// any other server text is shown as-is.
+const TRANSLATED_ERRORS: { prefix: string; key: string }[] = [
+  { prefix: 'Webhook URL not configured', key: 'META_TEMPLATES.ERRORS.WEBHOOK_NOT_CONFIGURED' },
+  { prefix: 'Webhook returned', key: 'META_TEMPLATES.ERRORS.WEBHOOK_FAILED' },
+];
+
 export const getTemplateErrorMessage = (error: unknown): string => {
   if (typeof error === 'object' && error !== null) {
     const message = (error as ErrorWithResponse).response?.data?.error;
     if (typeof message === 'string' && message.length > 0) {
-      return message;
+      const translated = TRANSLATED_ERRORS.find(e => message.startsWith(e.prefix));
+      return translated ? I18n.t(translated.key) : message;
     }
   }
   return I18n.t('META_TEMPLATES.ERRORS.GENERIC');

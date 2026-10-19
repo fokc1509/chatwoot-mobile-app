@@ -115,12 +115,25 @@ describe('MetaTemplateService', () => {
 });
 
 describe('getTemplateErrorMessage', () => {
-  it('returns the server error string', () => {
+  it('returns other server error strings as-is', () => {
     expect(
       getTemplateErrorMessage({
-        response: { status: 502, data: { error: 'Webhook returned 500' } },
+        response: { status: 403, data: { error: 'Você não tem permissão' } },
       }),
-    ).toBe('Webhook returned 500');
+    ).toBe('Você não tem permissão');
+  });
+
+  it('maps the English webhook errors of send_template_to_webhook to pt-BR keys', () => {
+    expect(
+      getTemplateErrorMessage({
+        response: { status: 422, data: { error: 'Webhook URL not configured for this inbox' } },
+      }),
+    ).toBe('META_TEMPLATES.ERRORS.WEBHOOK_NOT_CONFIGURED');
+    expect(
+      getTemplateErrorMessage({
+        response: { status: 502, data: { error: 'Webhook returned: 500 Internal Server Error' } },
+      }),
+    ).toBe('META_TEMPLATES.ERRORS.WEBHOOK_FAILED');
   });
 
   it('returns the generic key without a usable error string', () => {
