@@ -2,6 +2,7 @@ import type { AxiosRequestConfig } from 'axios';
 
 import { apiService } from '@/services/APIService';
 import I18n from '@/i18n';
+import { getHttpStatus } from '@/utils/httpUtils';
 import type {
   LigacaoJanela,
   LigacaoListResponse,
@@ -55,10 +56,8 @@ type ErrorWithResponse = {
 const asErrorWithResponse = (error: unknown): ErrorWithResponse | undefined =>
   typeof error === 'object' && error !== null ? (error as ErrorWithResponse) : undefined;
 
-export const getHttpStatus = (error: unknown): number | undefined => {
-  const status = asErrorWithResponse(error)?.response?.status;
-  return typeof status === 'number' ? status : undefined;
-};
+// Moved to a shared util (also used by meta templates); re-exported for callers.
+export { getHttpStatus };
 
 export const getLigacaoErrorMessage = (error: unknown): string => {
   if (getHttpStatus(error) === 422) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { tailwind } from '@/theme';
@@ -13,10 +13,12 @@ import { openURL } from '@/utils/urlUtils';
 type ReplyWarningProps = {
   inbox: Inbox;
   conversation: Conversation;
+  /** Shown as "Enviar template" when the inbox can send Meta templates. */
+  onPressTemplate?: () => void;
 };
 
 export const ReplyWarning = (props: ReplyWarningProps) => {
-  const { inbox, conversation } = props;
+  const { inbox, conversation, onPressTemplate } = props;
   const channel = conversation?.meta?.channel;
   const isAPIChannel = channel === INBOX_TYPES.API;
   const isAWhatsappChannel = channel === INBOX_TYPES.WHATSAPP;
@@ -74,6 +76,20 @@ export const ReplyWarning = (props: ReplyWarningProps) => {
           </Animated.Text>
         </Animated.Text>
       </Animated.View>
+      {onPressTemplate ? (
+        <Pressable
+          onPress={onPressTemplate}
+          accessibilityRole="button"
+          hitSlop={6}
+          testID="reply-warning-send-template"
+          style={({ pressed }) =>
+            tailwind.style('ml-3 px-3 py-2 rounded-[10px] bg-white', pressed ? 'opacity-70' : '')
+          }>
+          <Text style={tailwind.style('text-sm font-inter-medium-24 text-ruby-800')}>
+            {i18n.t('META_TEMPLATES.SEND_TEMPLATE')}
+          </Text>
+        </Pressable>
+      ) : null}
     </Pressable>
   );
 };

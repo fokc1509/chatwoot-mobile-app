@@ -529,6 +529,9 @@
     }
   },
   "META_TEMPLATES": {
+    "BUTTON": "Templates",
+    "SEND_TEMPLATE": "Enviar template",
+    "PICKER_TITLE": "Templates",
     "ERRORS": {
       "GENERIC": "Não foi possível enviar o template. Tente novamente."
     }

@@ -168,3 +168,17 @@ export interface TemplateParams {
   content_mode: TemplateContentMode;
   processed_params: TemplateProcessedParams;
 }
+
+// --- Redux state (`state.metaTemplates`).
+
+export interface MetaTemplateInboxState {
+  templates: MetaTemplate[];
+  // null = not checked yet; false = the server denied it (401/403).
+  access: boolean | null;
+  isLoading: boolean;
+}
+
+export interface MetaTemplateState {
+  byInbox: Record<number, MetaTemplateInboxState>;
+  empreendimentos: string[];
+}

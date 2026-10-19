@@ -33,6 +33,8 @@ import i18n from '@/i18n';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { MacrosList } from './components/macros/MacrosList';
 import { macroActions } from '@/store/macro/macroActions';
+import { selectInboxById } from '@/store/inbox/inboxSelectors';
+import { metaTemplateActions } from '@/store/meta-template/metaTemplateActions';
 
 export const ChatWindow = (props: ChatScreenProps) => {
   return (
@@ -82,6 +84,16 @@ const ChatScreenWrapper = (props: ChatScreenProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inboxId]);
+
+  // Templates (and whether this user may use them) are checked when a
+  // conversation of an inbox with the feature on is opened.
+  const inbox = useAppSelector(state => (inboxId ? selectInboxById(state, inboxId) : undefined));
+  const templatesEnabled = !!inbox?.metaInboxConfig?.enabled;
+  useEffect(() => {
+    if (inboxId && templatesEnabled) {
+      dispatch(metaTemplateActions.fetchTemplates(inboxId));
+    }
+  }, [dispatch, inboxId, templatesEnabled]);
 
   return (
     <React.Fragment>

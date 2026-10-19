@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Alert, Keyboard, TextInput } from 'react-native';
+import { Alert, Keyboard, Pressable, Text, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import Animated, {
   FadeIn,
@@ -40,6 +42,12 @@ import { selectUserId, selectUserName, selectUserThumbnail } from '@/store/auth/
 import { selectConversationById } from '@/store/conversation/conversationSelectors';
 import { selectInboxById } from '@/store/inbox/inboxSelectors';
 import { conversationActions } from '@/store/conversation/conversationActions';
+import {
+  selectTemplateAccess,
+  shouldShowTemplateButton,
+} from '@/store/meta-template/metaTemplateSelectors';
+import type { TabBarExcludedScreenParamList } from '@/navigation/tabs/AppTabs';
+import i18n from '@/i18n';
 
 import { AddCommandButton } from './buttons/AddCommandButton';
 import { SendMessageButton } from './buttons/SendMessageButton';
@@ -107,6 +115,19 @@ const BottomSheetContent = () => {
   const conversation = useAppSelector(state => selectConversationById(state, conversationId));
   const { inboxId, canReply } = conversation || {};
   const inbox = useAppSelector(state => (inboxId ? selectInboxById(state, inboxId) : undefined));
+
+  const navigation = useNavigation<NativeStackNavigationProp<TabBarExcludedScreenParamList>>();
+  const templateAccess = useAppSelector(selectTemplateAccess(inboxId));
+  // The closed-window banner has its own entry, so the reply box only offers
+  // templates while the conversation can be replied to.
+  const showTemplateButton =
+    !!canReply && shouldShowTemplateButton(inbox, templateAccess, isPrivate);
+  const showBannerTemplateButton = shouldShowTemplateButton(inbox, templateAccess, false);
+  const openTemplatePicker = () => {
+    if (!inboxId) return;
+    Keyboard.dismiss();
+    navigation.navigate('MetaTemplatePicker', { conversationId, inboxId });
+  };
 
   const selectAgents = useAppSelector(selectAssignableParticipantsByInboxId);
   const agents = inboxId ? selectAgents(inboxId, '') : [];
@@ -381,7 +402,11 @@ const BottomSheetContent = () => {
     <AnimatedKeyboardStickyView style={[tailwind.style('bg-white'), animatedInputWrapperStyle]}>
       {!canReply && inbox && conversation && (
         <Animated.View entering={FadeIn.duration(250)} exiting={FadeOut.duration(10)}>
-          <ReplyWarning inbox={inbox} conversation={conversation} />
+          <ReplyWarning
+            inbox={inbox}
+            conversation={conversation}
+            onPressTemplate={showBannerTemplateButton ? openTemplatePicker : undefined}
+          />
         </Animated.View>
       )}
       {shouldShowCannedResponses && (
@@ -411,6 +436,23 @@ const BottomSheetContent = () => {
         )}
 
         {typingText && <TypingIndicator typingText={typingText} />}
+
+        {showTemplateButton && !isVoiceRecorderOpen ? (
+          <Animated.View style={tailwind.style('flex flex-row px-3 pb-2')}>
+            <Pressable
+              onPress={openTemplatePicker}
+              accessibilityRole="button"
+              hitSlop={6}
+              testID="reply-box-templates-button"
+              style={({ pressed }) =>
+                tailwind.style('px-3 py-1.5 rounded-full bg-gray-100', pressed ? 'opacity-70' : '')
+              }>
+              <Text style={tailwind.style('text-sm font-inter-medium-24 text-gray-950')}>
+                {i18n.t('META_TEMPLATES.BUTTON')}
+              </Text>
+            </Pressable>
+          </Animated.View>
+        ) : null}
 
         {isVoiceRecorderOpen ? (
           <AudioRecorder onRecordingComplete={onRecordingComplete} audioFormat={audioFormat()} />

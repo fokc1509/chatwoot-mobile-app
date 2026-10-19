@@ -28,6 +28,7 @@ import cannedResponseSlice from '@/store/canned-response/cannedResponseSlice';
 import macroSlice from '@/store/macro/macroSlice';
 import searchSlice from '@/store/search/searchSlice';
 import ligacaoSlice from '@/store/ligacao/ligacaoSlice';
+import metaTemplateSlice from '@/store/meta-template/metaTemplateSlice';
 
 export const appReducer = combineReducers({
   auth: authSlice,
@@ -57,4 +58,5 @@ export const appReducer = combineReducers({
   localRecordedAudioCache: localRecordedAudioCacheSlice,
   search: searchSlice,
   ligacoes: ligacaoSlice,
+  metaTemplates: metaTemplateSlice,
 });

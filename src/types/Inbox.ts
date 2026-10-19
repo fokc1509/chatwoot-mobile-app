@@ -1,4 +1,5 @@
 import { Channel } from './common/Channel';
+import type { MetaInboxConfig } from '@/store/meta-template/metaTemplateTypes';
 
 export type Inbox = {
   id: number;
@@ -12,4 +13,6 @@ export type Inbox = {
     agentReplyTimeWindowMessage?: string;
   };
   provider: string;
+  // `meta_inbox_config` (camelCased by transformInbox); enables Meta templates.
+  metaInboxConfig?: MetaInboxConfig | null;
 };

@@ -24,6 +24,7 @@ import ChatScreen from '@/screens/chat-screen/ChatScreen';
 import ContactDetailsScreen from '@/screens/contact-details/ContactDetailsScreen';
 import DashboardScreen from '@/screens/dashboard/DashboardScreen';
 import SearchScreen from '@/screens/search/SearchScreen';
+import MetaTemplatePickerScreen from '@/screens/meta-templates/MetaTemplatePickerScreen';
 
 import { selectInstallationUrl } from '@/store/settings/settingsSelectors';
 import { BottomTabBar } from './BottomTabBar';
@@ -73,6 +74,8 @@ export type TabBarExcludedScreenParamList = {
   ImageScreen: undefined;
   ConversationDetails: undefined;
   ConversationAction: undefined;
+  MetaTemplatePicker: { conversationId: number; inboxId: number };
+  MetaTemplateFill: { conversationId: number; inboxId: number; templateId: number | string };
 };
 const Stack = createNativeStackNavigator<TabBarExcludedScreenParamList>();
 
@@ -221,6 +224,11 @@ export const AppTabs = () => {
           options={{ headerShown: false, animation: 'slide_from_right' }}
           name="SearchScreen"
           component={SearchScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false, animation: 'slide_from_right' }}
+          name="MetaTemplatePicker"
+          component={MetaTemplatePickerScreen}
         />
       </Stack.Navigator>
     );
