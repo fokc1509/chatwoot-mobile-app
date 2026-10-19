@@ -592,7 +592,54 @@
   "ATTENDANCE": {
     "ERROR": "Não foi possível executar a ação. Tente novamente.",
     "ADIAR_MODAL": {
-      "MOTIVO_REQUIRED": "Informe um motivo com pelo menos 5 caracteres."
+      "TITLE": "Adiar lead por 15 dias",
+      "LABEL": "Motivo do adiamento (obrigatório)",
+      "PLACEHOLDER": "Ex.: lead pediu para retomar contato depois do dia 15",
+      "COUNTER": "%{count} caracteres (mínimo 5)",
+      "MOTIVO_REQUIRED": "Informe um motivo com pelo menos 5 caracteres.",
+      "CONFIRM": "Confirmar adiamento",
+      "CANCEL": "Cancelar",
+      "SUCCESS": "Contato adiado por 15 dias"
+    },
+    "DISCARD_MODAL": {
+      "TITLE": "Descartar lead",
+      "REQUEST_TITLE": "Solicitar descarte",
+      "STEP_BUCKET": "Como descartar este lead?",
+      "BUCKET_REATIVACAO_TITLE": "Reativação",
+      "BUCKET_REATIVACAO_DESC": "Base fria — o lead volta a ser provocado cerca de 1× por mês ou em grandes campanhas.",
+      "BUCKET_DESCARTE_TITLE": "Descarte",
+      "BUCKET_DESCARTE_DESC": "Sem perfil ou sem interesse — a base não é reativada.",
+      "STEP_MOTIVO": "Qual o motivo?",
+      "MOTIVO_PLACEHOLDER": "Selecione o motivo",
+      "OUTRO_PLACEHOLDER": "Descreva o motivo",
+      "OUTRO_REQUIRED": "Descreva o motivo para continuar",
+      "CONFIRM": "Descartar",
+      "REQUEST_CONFIRM": "Solicitar descarte",
+      "REQUEST_HINT": "Um supervisor vai revisar e aprovar o descarte.",
+      "BACK": "Voltar",
+      "CANCEL": "Cancelar",
+      "SUCCESS": "Lead descartado",
+      "REQUEST_SUCCESS": "Descarte solicitado — aguardando aprovação",
+      "SUGGEST_SUCCESS": "Motivo registrado — encaminhando…"
+    },
+    "MOTIVOS": {
+      "NAO_RESPONDE": "Não responde",
+      "OUTRAS_METRAGENS": "Deseja outras metragens",
+      "SEM_PERFIL_FINANCEIRO": "Não tem perfil financeiro",
+      "SEM_INTERESSE_REGIAO": "Não tem interesse na região",
+      "OUTRO": "Outro"
+    },
+    "IA_CONFIRM": {
+      "TITLE": "Devolver para a IA?",
+      "DESC": "O lead volta ao fluxo de follow-up da inteligência Arqos.",
+      "CONFIRM": "Devolver para IA",
+      "SUCCESS": "Lead devolvido para a IA"
+    },
+    "ENVIAR_MSG_CONFIRM": {
+      "TITLE": "Enviar mensagem",
+      "DESC": "Você terá 1 hora para enviar uma mensagem ou template ao cliente. Iniciar?",
+      "CONFIRM": "Iniciar",
+      "SUCCESS": "Você tem 1 hora para enviar a mensagem ao cliente"
     }
   }
 }

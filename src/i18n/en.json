@@ -631,7 +631,54 @@
   "ATTENDANCE": {
     "ERROR": "Could not complete the action. Please try again.",
     "ADIAR_MODAL": {
-      "MOTIVO_REQUIRED": "Enter a reason with at least 5 characters."
+      "TITLE": "Postpone lead for 15 days",
+      "LABEL": "Reason for postponing (required)",
+      "PLACEHOLDER": "E.g.: lead asked to resume contact after the 15th",
+      "COUNTER": "%{count} characters (minimum 5)",
+      "MOTIVO_REQUIRED": "Enter a reason with at least 5 characters.",
+      "CONFIRM": "Confirm postponement",
+      "CANCEL": "Cancel",
+      "SUCCESS": "Contact postponed for 15 days"
+    },
+    "DISCARD_MODAL": {
+      "TITLE": "Discard lead",
+      "REQUEST_TITLE": "Request discard",
+      "STEP_BUCKET": "How should this lead be discarded?",
+      "BUCKET_REATIVACAO_TITLE": "Reactivation",
+      "BUCKET_REATIVACAO_DESC": "Cold base — the lead is prompted again roughly once a month or in major campaigns.",
+      "BUCKET_DESCARTE_TITLE": "Discard",
+      "BUCKET_DESCARTE_DESC": "No profile or no interest — the base is not reactivated.",
+      "STEP_MOTIVO": "What is the reason?",
+      "MOTIVO_PLACEHOLDER": "Select the reason",
+      "OUTRO_PLACEHOLDER": "Describe the reason",
+      "OUTRO_REQUIRED": "Describe the reason to continue",
+      "CONFIRM": "Discard",
+      "REQUEST_CONFIRM": "Request discard",
+      "REQUEST_HINT": "A supervisor will review and approve the discard.",
+      "BACK": "Back",
+      "CANCEL": "Cancel",
+      "SUCCESS": "Lead discarded",
+      "REQUEST_SUCCESS": "Discard requested — awaiting approval",
+      "SUGGEST_SUCCESS": "Reason recorded — forwarding…"
+    },
+    "MOTIVOS": {
+      "NAO_RESPONDE": "Not responding",
+      "OUTRAS_METRAGENS": "Wants other sizes",
+      "SEM_PERFIL_FINANCEIRO": "No financial profile",
+      "SEM_INTERESSE_REGIAO": "No interest in the region",
+      "OUTRO": "Other"
+    },
+    "IA_CONFIRM": {
+      "TITLE": "Return to AI?",
+      "DESC": "The lead returns to the Arqos intelligence follow-up flow.",
+      "CONFIRM": "Return to AI",
+      "SUCCESS": "Lead returned to the AI"
+    },
+    "ENVIAR_MSG_CONFIRM": {
+      "TITLE": "Send message",
+      "DESC": "You will have 1 hour to send a message or template to the customer. Start?",
+      "CONFIRM": "Start",
+      "SUCCESS": "You have 1 hour to send the message to the customer"
     }
   }
 }

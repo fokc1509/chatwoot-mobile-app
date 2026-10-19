@@ -9,6 +9,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { NavigationContainer } from '@react-navigation/native';
 import { AppTabs } from './tabs/AppTabs';
+import { AttendanceFlowProvider } from '@/screens/chat-screen/components/attendance/AttendanceFlowHost';
 import i18n from 'i18n';
 import { navigationRef } from '@/utils/navigationUtils';
 import { findConversationLinkFromPush, findNotificationFromFCM } from '@/utils/pushUtils';
@@ -201,11 +202,14 @@ export const AppNavigationContainer = () => {
         routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name;
       }}
       fallback={<ActivityIndicator animating />}>
-      <BottomSheetModalProvider>
-        <View style={styles.navigationLayout} onLayout={onLayoutRootView}>
-          <AppTabs />
-        </View>
-      </BottomSheetModalProvider>
+      {/* Outside BottomSheetModalProvider so sheets rendered in its portal host see it too. */}
+      <AttendanceFlowProvider>
+        <BottomSheetModalProvider>
+          <View style={styles.navigationLayout} onLayout={onLayoutRootView}>
+            <AppTabs />
+          </View>
+        </BottomSheetModalProvider>
+      </AttendanceFlowProvider>
     </NavigationContainer>
   );
 };
