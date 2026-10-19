@@ -527,5 +527,10 @@
       "PUXADO": "Lead é seu. Mande a mensagem de confirmação.",
       "RESUMO_SALVO": "Resumo salvo na conversa e no CV."
     }
+  },
+  "META_TEMPLATES": {
+    "ERRORS": {
+      "GENERIC": "Não foi possível enviar o template. Tente novamente."
+    }
   }
 }

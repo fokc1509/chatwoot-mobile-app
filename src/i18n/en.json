@@ -567,5 +567,10 @@
       "PUXADO": "The lead is yours. Send the confirmation message.",
       "RESUMO_SALVO": "Summary saved to the conversation and CV."
     }
+  },
+  "META_TEMPLATES": {
+    "ERRORS": {
+      "GENERIC": "Could not send the template. Please try again."
+    }
   }
 }
