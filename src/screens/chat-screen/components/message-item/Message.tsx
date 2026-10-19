@@ -18,7 +18,9 @@ import {
   // FileBubble,
   EmailBubble,
   UnsupportedBubble,
+  OptionsBubble,
 } from '../message-components';
+import { isOptionsMessage } from '../message-components/optionsBubbleViewModel';
 import { showToast } from '@/utils/toastUtils';
 import {
   // ATTACHMENT_TYPES,
@@ -401,6 +403,9 @@ export const MessageComponent = (props: MessageComponentProps) => {
 
     if (isUnsupported) {
       messageContent = <UnsupportedBubble />;
+    } else if (isOptionsMessage(item)) {
+      // Follow-up buttons: like the web, every input_select with items is clickable.
+      messageContent = <OptionsBubble item={item} variant={variant()} />;
     } else if (contentType === CONTENT_TYPES.INCOMING_EMAIL) {
       messageContent = <EmailBubble item={item} variant={variant()} />;
     } else if (isEmailInbox && !item.private) {
