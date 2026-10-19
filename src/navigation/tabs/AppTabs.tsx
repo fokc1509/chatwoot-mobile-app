@@ -25,6 +25,7 @@ import ContactDetailsScreen from '@/screens/contact-details/ContactDetailsScreen
 import DashboardScreen from '@/screens/dashboard/DashboardScreen';
 import SearchScreen from '@/screens/search/SearchScreen';
 import MetaTemplatePickerScreen from '@/screens/meta-templates/MetaTemplatePickerScreen';
+import MetaTemplateFillScreen from '@/screens/meta-templates/MetaTemplateFillScreen';
 
 import { selectInstallationUrl } from '@/store/settings/settingsSelectors';
 import { BottomTabBar } from './BottomTabBar';
@@ -229,6 +230,11 @@ export const AppTabs = () => {
           options={{ headerShown: false, animation: 'slide_from_right' }}
           name="MetaTemplatePicker"
           component={MetaTemplatePickerScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false, animation: 'slide_from_right' }}
+          name="MetaTemplateFill"
+          component={MetaTemplateFillScreen}
         />
       </Stack.Navigator>
     );
