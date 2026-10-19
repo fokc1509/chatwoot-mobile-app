@@ -1,0 +1,1107 @@
+{
+  "generatedFrom": "cw-arqos ReplyBox.vue buildWabaTemplatePayload (verbatim body, frozen Date)",
+  "fixedNow": "2026-10-18T13:45:30.123Z",
+  "cases": [
+    {
+      "name": "full processed_params with underscore keys, no reply-to",
+      "input": {
+        "conversation": {
+          "meta": {
+            "sender": {
+              "additional_attributes": {
+                "source_id": "5511999999999",
+                "city": "São Paulo"
+              },
+              "availability_status": "offline",
+              "email": null,
+              "id": 401,
+              "name": "Maria Souza",
+              "phone_number": "+5511999999999",
+              "blocked": false,
+              "identifier": null,
+              "thumbnail": "",
+              "custom_attributes": {},
+              "last_activity_at": 1792330000,
+              "created_at": 1792320000
+            },
+            "channel": "Channel::Api",
+            "assignee": {
+              "id": 17,
+              "account_id": 3,
+              "availability_status": "online",
+              "auto_offline": true,
+              "confirmed": true,
+              "email": "corretor@arqos.com.br",
+              "available_name": "Felipe Corretor",
+              "name": "Felipe Corretor",
+              "role": "agent",
+              "thumbnail": "",
+              "custom_role_id": null
+            },
+            "assignee_type": "User",
+            "hmac_verified": false
+          },
+          "id": 812,
+          "messages": [
+            {
+              "id": 5521,
+              "content": "Oi, tenho interesse no Alameda",
+              "account_id": 3,
+              "inbox_id": 9,
+              "conversation_id": 812,
+              "message_type": 0,
+              "created_at": 1792330000,
+              "updated_at": "2026-10-17T10:06:40.000Z",
+              "private": false,
+              "status": "sent",
+              "source_id": "wamid.HBgNNTUxMTk5OTk5OTk5ORUCABIYFjNFQjA",
+              "content_type": "text",
+              "content_attributes": {},
+              "sender_type": "Contact",
+              "sender_id": 401,
+              "external_source_ids": {},
+              "additional_attributes": {},
+              "processed_message_content": "Oi, tenho interesse no Alameda",
+              "sentiment": {},
+              "conversation": {
+                "assignee_id": 17,
+                "unread_count": 1,
+                "last_activity_at": 1792330000,
+                "contact_inbox": {
+                  "source_id": "5511999999999"
+                }
+              },
+              "sender": {
+                "additional_attributes": {
+                  "source_id": "5511999999999"
+                },
+                "custom_attributes": {},
+                "email": null,
+                "id": 401,
+                "identifier": null,
+                "name": "Maria Souza",
+                "phone_number": "+5511999999999",
+                "thumbnail": "",
+                "blocked": false,
+                "type": "contact"
+              }
+            }
+          ],
+          "account_id": 3,
+          "uuid": "6f1c1f0e-5b6e-4d8e-9a77-1b3f4c2d9e10",
+          "additional_attributes": {
+            "referer": null,
+            "origem": "meta_ads"
+          },
+          "agent_last_seen_at": 1792330100,
+          "assignee_last_seen_at": 1792330100,
+          "can_reply": true,
+          "contact_last_seen_at": 0,
+          "custom_attributes": {
+            "empreendimento": "Alameda"
+          },
+          "inbox_id": 9,
+          "labels": ["lead"],
+          "muted": false,
+          "snoozed_until": null,
+          "status": "open",
+          "created_at": 1792320000,
+          "updated_at": 1792330000.123,
+          "timestamp": 1792330000,
+          "first_reply_created_at": 0,
+          "unread_count": 1,
+          "last_non_activity_message": {
+            "id": 5521,
+            "content": "Oi, tenho interesse no Alameda",
+            "account_id": 3,
+            "inbox_id": 9,
+            "conversation_id": 812,
+            "message_type": 0,
+            "created_at": 1792330000,
+            "updated_at": "2026-10-17T10:06:40.000Z",
+            "private": false,
+            "status": "sent",
+            "source_id": "wamid.HBgNNTUxMTk5OTk5OTk5ORUCABIYFjNFQjA",
+            "content_type": "text",
+            "content_attributes": {},
+            "sender_type": "Contact",
+            "sender_id": 401,
+            "external_source_ids": {},
+            "additional_attributes": {},
+            "processed_message_content": "Oi, tenho interesse no Alameda",
+            "sentiment": {},
+            "conversation": {
+              "assignee_id": 17,
+              "unread_count": 1,
+              "last_activity_at": 1792330000,
+              "contact_inbox": {
+                "source_id": "5511999999999"
+              }
+            },
+            "sender": {
+              "additional_attributes": {
+                "source_id": "5511999999999"
+              },
+              "custom_attributes": {},
+              "email": null,
+              "id": 401,
+              "identifier": null,
+              "name": "Maria Souza",
+              "phone_number": "+5511999999999",
+              "thumbnail": "",
+              "blocked": false,
+              "type": "contact"
+            }
+          },
+          "last_activity_at": 1792330000,
+          "priority": null,
+          "waiting_since": 1792330000
+        },
+        "inbox": {
+          "id": 9,
+          "avatar_url": "",
+          "channel_id": 4,
+          "name": "WhatsApp Vendas",
+          "channel_type": "Channel::Api",
+          "greeting_enabled": false,
+          "greeting_message": null,
+          "working_hours_enabled": false,
+          "enable_email_collect": true,
+          "csat_survey_enabled": false,
+          "enable_auto_assignment": true,
+          "out_of_office_message": null,
+          "working_hours": [],
+          "timezone": "America/Sao_Paulo",
+          "callback_webhook_url": null,
+          "allow_messages_after_resolved": true,
+          "lock_to_single_conversation": false,
+          "sender_name_type": "friendly",
+          "business_name": null,
+          "webhook_url": "https://webhooks.arqos.online/webhook/chatwoot",
+          "inbox_identifier": "abc123",
+          "additional_attributes": {
+            "waba_webhook_url": "https://webhooks.arqos.online/webhook/waba"
+          },
+          "meta_inbox_config": {
+            "enabled": true
+          }
+        },
+        "sender": {
+          "access_token": "redacted",
+          "account_id": 3,
+          "available_name": "Felipe Corretor",
+          "avatar_url": "",
+          "confirmed": true,
+          "display_name": null,
+          "message_signature": null,
+          "email": "corretor@arqos.com.br",
+          "id": 17,
+          "inviter_id": null,
+          "name": "Felipe Corretor",
+          "provider": "email",
+          "pubsub_token": "redacted",
+          "role": "agent",
+          "ui_settings": {},
+          "uid": "corretor@arqos.com.br",
+          "type": "user",
+          "accounts": [
+            {
+              "id": 3,
+              "name": "Arqos Imóveis",
+              "role": "agent",
+              "status": "active"
+            }
+          ]
+        },
+        "accountId": 3,
+        "globalConfigAccountName": null,
+        "inReplyTo": {},
+        "templateParams": {
+          "name": "arqos_leads_followup_text",
+          "category": "MARKETING",
+          "language": "pt_BR",
+          "id": 31,
+          "waba_template_id": "1234567890123456",
+          "content_mode": "rendered",
+          "processed_params": {
+            "body": {
+              "name": "Maria",
+              "empreendimento": "Alameda",
+              "msg_body": "temos novidades para você"
+            }
+          }
+        },
+        "now": "2026-10-18T13:45:30.123Z"
+      },
+      "expected": {
+        "headers": {
+          "host": "webhooks.arqos.online",
+          "content-type": "application/json"
+        },
+        "params": {},
+        "query": {},
+        "body": {
+          "account": {
+            "id": 3,
+            "name": "Account"
+          },
+          "additional_attributes": {},
+          "content_attributes": {},
+          "content_type": "text",
+          "content": "Template: arqos_leads_followup_text",
+          "conversation": {
+            "additional_attributes": {
+              "referer": null,
+              "origem": "meta_ads"
+            },
+            "can_reply": true,
+            "channel": "Channel::Api",
+            "contact_inbox": {
+              "source_id": "5511999999999"
+            },
+            "id": 812,
+            "inbox_id": 9,
+            "messages": [
+              {
+                "id": 1792331130123,
+                "content": "Template: arqos_leads_followup_text",
+                "account_id": 3,
+                "inbox_id": 9,
+                "conversation_id": 812,
+                "message_type": 1,
+                "created_at": 1792331130,
+                "updated_at": "2026-10-18T13:45:30.123Z",
+                "private": false,
+                "status": "sent",
+                "content_type": "text",
+                "sender_type": "User",
+                "sender_id": 17,
+                "sender": {
+                  "id": 17,
+                  "name": "Felipe Corretor",
+                  "email": "corretor@arqos.com.br",
+                  "type": "user",
+                  "availability_status": "online",
+                  "thumbnail": ""
+                }
+              }
+            ],
+            "meta": {
+              "sender": {
+                "additional_attributes": {
+                  "source_id": "5511999999999",
+                  "city": "São Paulo"
+                },
+                "availability_status": "offline",
+                "email": null,
+                "id": 401,
+                "name": "Maria Souza",
+                "phone_number": "+5511999999999",
+                "blocked": false,
+                "identifier": null,
+                "thumbnail": "",
+                "custom_attributes": {},
+                "last_activity_at": 1792330000,
+                "created_at": 1792320000
+              },
+              "channel": "Channel::Api",
+              "assignee": {
+                "id": 17,
+                "account_id": 3,
+                "availability_status": "online",
+                "auto_offline": true,
+                "confirmed": true,
+                "email": "corretor@arqos.com.br",
+                "available_name": "Felipe Corretor",
+                "name": "Felipe Corretor",
+                "role": "agent",
+                "thumbnail": "",
+                "custom_role_id": null
+              },
+              "assignee_type": "User",
+              "hmac_verified": false
+            },
+            "status": "open",
+            "unread_count": 0,
+            "agent_last_seen_at": 1792331130
+          },
+          "created_at": "2026-10-18T13:45:30.123Z",
+          "id": 1792331130123,
+          "inbox": {
+            "id": 9,
+            "name": "WhatsApp Vendas"
+          },
+          "message_type": "outgoing",
+          "private": false,
+          "sender": {
+            "id": 17,
+            "name": "Felipe Corretor",
+            "email": "corretor@arqos.com.br",
+            "type": "user"
+          },
+          "event": "message_created",
+          "waba_template": {
+            "waba_template_id": "1234567890123456",
+            "waba_template_name": "arqos_leads_followup_text",
+            "waba_template_variables": {
+              "body": {
+                "name": "Maria",
+                "empreendimento": "Alameda",
+                "msg_body": "temos novidades para você"
+              }
+            }
+          }
+        },
+        "executionMode": "production"
+      }
+    },
+    {
+      "name": "empty processed_params",
+      "input": {
+        "conversation": {
+          "meta": {
+            "sender": {
+              "additional_attributes": {
+                "source_id": "5511999999999",
+                "city": "São Paulo"
+              },
+              "availability_status": "offline",
+              "email": null,
+              "id": 401,
+              "name": "Maria Souza",
+              "phone_number": "+5511999999999",
+              "blocked": false,
+              "identifier": null,
+              "thumbnail": "",
+              "custom_attributes": {},
+              "last_activity_at": 1792330000,
+              "created_at": 1792320000
+            },
+            "channel": "Channel::Api",
+            "assignee": {
+              "id": 17,
+              "account_id": 3,
+              "availability_status": "online",
+              "auto_offline": true,
+              "confirmed": true,
+              "email": "corretor@arqos.com.br",
+              "available_name": "Felipe Corretor",
+              "name": "Felipe Corretor",
+              "role": "agent",
+              "thumbnail": "",
+              "custom_role_id": null
+            },
+            "assignee_type": "User",
+            "hmac_verified": false
+          },
+          "id": 812,
+          "messages": [
+            {
+              "id": 5521,
+              "content": "Oi, tenho interesse no Alameda",
+              "account_id": 3,
+              "inbox_id": 9,
+              "conversation_id": 812,
+              "message_type": 0,
+              "created_at": 1792330000,
+              "updated_at": "2026-10-17T10:06:40.000Z",
+              "private": false,
+              "status": "sent",
+              "source_id": "wamid.HBgNNTUxMTk5OTk5OTk5ORUCABIYFjNFQjA",
+              "content_type": "text",
+              "content_attributes": {},
+              "sender_type": "Contact",
+              "sender_id": 401,
+              "external_source_ids": {},
+              "additional_attributes": {},
+              "processed_message_content": "Oi, tenho interesse no Alameda",
+              "sentiment": {},
+              "conversation": {
+                "assignee_id": 17,
+                "unread_count": 1,
+                "last_activity_at": 1792330000,
+                "contact_inbox": {
+                  "source_id": "5511999999999"
+                }
+              },
+              "sender": {
+                "additional_attributes": {
+                  "source_id": "5511999999999"
+                },
+                "custom_attributes": {},
+                "email": null,
+                "id": 401,
+                "identifier": null,
+                "name": "Maria Souza",
+                "phone_number": "+5511999999999",
+                "thumbnail": "",
+                "blocked": false,
+                "type": "contact"
+              }
+            }
+          ],
+          "account_id": 3,
+          "uuid": "6f1c1f0e-5b6e-4d8e-9a77-1b3f4c2d9e10",
+          "additional_attributes": {
+            "referer": null,
+            "origem": "meta_ads"
+          },
+          "agent_last_seen_at": 1792330100,
+          "assignee_last_seen_at": 1792330100,
+          "can_reply": true,
+          "contact_last_seen_at": 0,
+          "custom_attributes": {
+            "empreendimento": "Alameda"
+          },
+          "inbox_id": 9,
+          "labels": ["lead"],
+          "muted": false,
+          "snoozed_until": null,
+          "status": "open",
+          "created_at": 1792320000,
+          "updated_at": 1792330000.123,
+          "timestamp": 1792330000,
+          "first_reply_created_at": 0,
+          "unread_count": 1,
+          "last_non_activity_message": {
+            "id": 5521,
+            "content": "Oi, tenho interesse no Alameda",
+            "account_id": 3,
+            "inbox_id": 9,
+            "conversation_id": 812,
+            "message_type": 0,
+            "created_at": 1792330000,
+            "updated_at": "2026-10-17T10:06:40.000Z",
+            "private": false,
+            "status": "sent",
+            "source_id": "wamid.HBgNNTUxMTk5OTk5OTk5ORUCABIYFjNFQjA",
+            "content_type": "text",
+            "content_attributes": {},
+            "sender_type": "Contact",
+            "sender_id": 401,
+            "external_source_ids": {},
+            "additional_attributes": {},
+            "processed_message_content": "Oi, tenho interesse no Alameda",
+            "sentiment": {},
+            "conversation": {
+              "assignee_id": 17,
+              "unread_count": 1,
+              "last_activity_at": 1792330000,
+              "contact_inbox": {
+                "source_id": "5511999999999"
+              }
+            },
+            "sender": {
+              "additional_attributes": {
+                "source_id": "5511999999999"
+              },
+              "custom_attributes": {},
+              "email": null,
+              "id": 401,
+              "identifier": null,
+              "name": "Maria Souza",
+              "phone_number": "+5511999999999",
+              "thumbnail": "",
+              "blocked": false,
+              "type": "contact"
+            }
+          },
+          "last_activity_at": 1792330000,
+          "priority": null,
+          "waiting_since": 1792330000
+        },
+        "inbox": {
+          "id": 9,
+          "avatar_url": "",
+          "channel_id": 4,
+          "name": "WhatsApp Vendas",
+          "channel_type": "Channel::Api",
+          "greeting_enabled": false,
+          "greeting_message": null,
+          "working_hours_enabled": false,
+          "enable_email_collect": true,
+          "csat_survey_enabled": false,
+          "enable_auto_assignment": true,
+          "out_of_office_message": null,
+          "working_hours": [],
+          "timezone": "America/Sao_Paulo",
+          "callback_webhook_url": null,
+          "allow_messages_after_resolved": true,
+          "lock_to_single_conversation": false,
+          "sender_name_type": "friendly",
+          "business_name": null,
+          "webhook_url": "https://webhooks.arqos.online/webhook/chatwoot",
+          "inbox_identifier": "abc123",
+          "additional_attributes": {
+            "waba_webhook_url": "https://webhooks.arqos.online/webhook/waba"
+          },
+          "meta_inbox_config": {
+            "enabled": true
+          }
+        },
+        "sender": {
+          "access_token": "redacted",
+          "account_id": 3,
+          "available_name": "Felipe Corretor",
+          "avatar_url": "",
+          "confirmed": true,
+          "display_name": null,
+          "message_signature": null,
+          "email": "corretor@arqos.com.br",
+          "id": 17,
+          "inviter_id": null,
+          "name": "Felipe Corretor",
+          "provider": "email",
+          "pubsub_token": "redacted",
+          "role": "agent",
+          "ui_settings": {},
+          "uid": "corretor@arqos.com.br",
+          "type": "user",
+          "accounts": [
+            {
+              "id": 3,
+              "name": "Arqos Imóveis",
+              "role": "agent",
+              "status": "active"
+            }
+          ]
+        },
+        "accountId": 3,
+        "globalConfigAccountName": null,
+        "inReplyTo": {},
+        "templateParams": {
+          "name": "arqos_boas_vindas",
+          "category": "UTILITY",
+          "language": "pt_BR",
+          "id": 32,
+          "waba_template_id": "6543210987654321",
+          "content_mode": "rendered",
+          "processed_params": {}
+        },
+        "now": "2026-10-18T13:45:30.123Z"
+      },
+      "expected": {
+        "headers": {
+          "host": "webhooks.arqos.online",
+          "content-type": "application/json"
+        },
+        "params": {},
+        "query": {},
+        "body": {
+          "account": {
+            "id": 3,
+            "name": "Account"
+          },
+          "additional_attributes": {},
+          "content_attributes": {},
+          "content_type": "text",
+          "content": "Template: arqos_boas_vindas",
+          "conversation": {
+            "additional_attributes": {
+              "referer": null,
+              "origem": "meta_ads"
+            },
+            "can_reply": true,
+            "channel": "Channel::Api",
+            "contact_inbox": {
+              "source_id": "5511999999999"
+            },
+            "id": 812,
+            "inbox_id": 9,
+            "messages": [
+              {
+                "id": 1792331130123,
+                "content": "Template: arqos_boas_vindas",
+                "account_id": 3,
+                "inbox_id": 9,
+                "conversation_id": 812,
+                "message_type": 1,
+                "created_at": 1792331130,
+                "updated_at": "2026-10-18T13:45:30.123Z",
+                "private": false,
+                "status": "sent",
+                "content_type": "text",
+                "sender_type": "User",
+                "sender_id": 17,
+                "sender": {
+                  "id": 17,
+                  "name": "Felipe Corretor",
+                  "email": "corretor@arqos.com.br",
+                  "type": "user",
+                  "availability_status": "online",
+                  "thumbnail": ""
+                }
+              }
+            ],
+            "meta": {
+              "sender": {
+                "additional_attributes": {
+                  "source_id": "5511999999999",
+                  "city": "São Paulo"
+                },
+                "availability_status": "offline",
+                "email": null,
+                "id": 401,
+                "name": "Maria Souza",
+                "phone_number": "+5511999999999",
+                "blocked": false,
+                "identifier": null,
+                "thumbnail": "",
+                "custom_attributes": {},
+                "last_activity_at": 1792330000,
+                "created_at": 1792320000
+              },
+              "channel": "Channel::Api",
+              "assignee": {
+                "id": 17,
+                "account_id": 3,
+                "availability_status": "online",
+                "auto_offline": true,
+                "confirmed": true,
+                "email": "corretor@arqos.com.br",
+                "available_name": "Felipe Corretor",
+                "name": "Felipe Corretor",
+                "role": "agent",
+                "thumbnail": "",
+                "custom_role_id": null
+              },
+              "assignee_type": "User",
+              "hmac_verified": false
+            },
+            "status": "open",
+            "unread_count": 0,
+            "agent_last_seen_at": 1792331130
+          },
+          "created_at": "2026-10-18T13:45:30.123Z",
+          "id": 1792331130123,
+          "inbox": {
+            "id": 9,
+            "name": "WhatsApp Vendas"
+          },
+          "message_type": "outgoing",
+          "private": false,
+          "sender": {
+            "id": 17,
+            "name": "Felipe Corretor",
+            "email": "corretor@arqos.com.br",
+            "type": "user"
+          },
+          "event": "message_created",
+          "waba_template": {
+            "waba_template_id": "6543210987654321",
+            "waba_template_name": "arqos_boas_vindas",
+            "waba_template_variables": {}
+          }
+        },
+        "executionMode": "production"
+      }
+    },
+    {
+      "name": "reply-to set, contact without source_id, null waba_template_id",
+      "input": {
+        "conversation": {
+          "meta": {
+            "sender": {
+              "additional_attributes": {},
+              "availability_status": "offline",
+              "email": null,
+              "id": 401,
+              "name": "Maria Souza",
+              "phone_number": "+5511999999999",
+              "blocked": false,
+              "identifier": null,
+              "thumbnail": "",
+              "custom_attributes": {},
+              "last_activity_at": 1792330000,
+              "created_at": 1792320000
+            },
+            "channel": "Channel::Api",
+            "assignee": {
+              "id": 17,
+              "account_id": 3,
+              "availability_status": "online",
+              "auto_offline": true,
+              "confirmed": true,
+              "email": "corretor@arqos.com.br",
+              "available_name": "Felipe Corretor",
+              "name": "Felipe Corretor",
+              "role": "agent",
+              "thumbnail": "",
+              "custom_role_id": null
+            },
+            "assignee_type": "User",
+            "hmac_verified": false
+          },
+          "id": 812,
+          "messages": [
+            {
+              "id": 5521,
+              "content": "Oi, tenho interesse no Alameda",
+              "account_id": 3,
+              "inbox_id": 9,
+              "conversation_id": 812,
+              "message_type": 0,
+              "created_at": 1792330000,
+              "updated_at": "2026-10-17T10:06:40.000Z",
+              "private": false,
+              "status": "sent",
+              "source_id": "wamid.HBgNNTUxMTk5OTk5OTk5ORUCABIYFjNFQjA",
+              "content_type": "text",
+              "content_attributes": {},
+              "sender_type": "Contact",
+              "sender_id": 401,
+              "external_source_ids": {},
+              "additional_attributes": {},
+              "processed_message_content": "Oi, tenho interesse no Alameda",
+              "sentiment": {},
+              "conversation": {
+                "assignee_id": 17,
+                "unread_count": 1,
+                "last_activity_at": 1792330000,
+                "contact_inbox": {
+                  "source_id": "5511999999999"
+                }
+              },
+              "sender": {
+                "additional_attributes": {
+                  "source_id": "5511999999999"
+                },
+                "custom_attributes": {},
+                "email": null,
+                "id": 401,
+                "identifier": null,
+                "name": "Maria Souza",
+                "phone_number": "+5511999999999",
+                "thumbnail": "",
+                "blocked": false,
+                "type": "contact"
+              }
+            }
+          ],
+          "account_id": 3,
+          "uuid": "6f1c1f0e-5b6e-4d8e-9a77-1b3f4c2d9e10",
+          "additional_attributes": {
+            "referer": null,
+            "origem": "meta_ads"
+          },
+          "agent_last_seen_at": 1792330100,
+          "assignee_last_seen_at": 1792330100,
+          "can_reply": true,
+          "contact_last_seen_at": 0,
+          "custom_attributes": {
+            "empreendimento": "Alameda"
+          },
+          "inbox_id": 9,
+          "labels": ["lead"],
+          "muted": false,
+          "snoozed_until": null,
+          "status": "open",
+          "created_at": 1792320000,
+          "updated_at": 1792330000.123,
+          "timestamp": 1792330000,
+          "first_reply_created_at": 0,
+          "unread_count": 1,
+          "last_non_activity_message": {
+            "id": 5521,
+            "content": "Oi, tenho interesse no Alameda",
+            "account_id": 3,
+            "inbox_id": 9,
+            "conversation_id": 812,
+            "message_type": 0,
+            "created_at": 1792330000,
+            "updated_at": "2026-10-17T10:06:40.000Z",
+            "private": false,
+            "status": "sent",
+            "source_id": "wamid.HBgNNTUxMTk5OTk5OTk5ORUCABIYFjNFQjA",
+            "content_type": "text",
+            "content_attributes": {},
+            "sender_type": "Contact",
+            "sender_id": 401,
+            "external_source_ids": {},
+            "additional_attributes": {},
+            "processed_message_content": "Oi, tenho interesse no Alameda",
+            "sentiment": {},
+            "conversation": {
+              "assignee_id": 17,
+              "unread_count": 1,
+              "last_activity_at": 1792330000,
+              "contact_inbox": {
+                "source_id": "5511999999999"
+              }
+            },
+            "sender": {
+              "additional_attributes": {
+                "source_id": "5511999999999"
+              },
+              "custom_attributes": {},
+              "email": null,
+              "id": 401,
+              "identifier": null,
+              "name": "Maria Souza",
+              "phone_number": "+5511999999999",
+              "thumbnail": "",
+              "blocked": false,
+              "type": "contact"
+            }
+          },
+          "last_activity_at": 1792330000,
+          "priority": null,
+          "waiting_since": 1792330000
+        },
+        "inbox": {
+          "id": 9,
+          "avatar_url": "",
+          "channel_id": 4,
+          "name": "WhatsApp Vendas",
+          "channel_type": "Channel::Api",
+          "greeting_enabled": false,
+          "greeting_message": null,
+          "working_hours_enabled": false,
+          "enable_email_collect": true,
+          "csat_survey_enabled": false,
+          "enable_auto_assignment": true,
+          "out_of_office_message": null,
+          "working_hours": [],
+          "timezone": "America/Sao_Paulo",
+          "callback_webhook_url": null,
+          "allow_messages_after_resolved": true,
+          "lock_to_single_conversation": false,
+          "sender_name_type": "friendly",
+          "business_name": null,
+          "webhook_url": "https://webhooks.arqos.online/webhook/chatwoot",
+          "inbox_identifier": "abc123",
+          "additional_attributes": {
+            "waba_webhook_url": "https://webhooks.arqos.online/webhook/waba"
+          },
+          "meta_inbox_config": {
+            "enabled": true
+          }
+        },
+        "sender": {
+          "access_token": "redacted",
+          "account_id": 3,
+          "available_name": "Felipe Corretor",
+          "avatar_url": "",
+          "confirmed": true,
+          "display_name": null,
+          "message_signature": null,
+          "email": "corretor@arqos.com.br",
+          "id": 17,
+          "inviter_id": null,
+          "name": "Felipe Corretor",
+          "provider": "email",
+          "pubsub_token": "redacted",
+          "role": "agent",
+          "ui_settings": {},
+          "uid": "corretor@arqos.com.br",
+          "type": "user",
+          "accounts": [
+            {
+              "id": 3,
+              "name": "Arqos Imóveis",
+              "role": "agent",
+              "status": "active"
+            }
+          ]
+        },
+        "accountId": 3,
+        "globalConfigAccountName": null,
+        "inReplyTo": {
+          "id": 5521,
+          "content": "Oi, tenho interesse no Alameda",
+          "account_id": 3,
+          "inbox_id": 9,
+          "conversation_id": 812,
+          "message_type": 0,
+          "created_at": 1792330000,
+          "updated_at": "2026-10-17T10:06:40.000Z",
+          "private": false,
+          "status": "sent",
+          "source_id": "wamid.HBgNNTUxMTk5OTk5OTk5ORUCABIYFjNFQjA",
+          "content_type": "text",
+          "content_attributes": {},
+          "sender_type": "Contact",
+          "sender_id": 401,
+          "external_source_ids": {},
+          "additional_attributes": {},
+          "processed_message_content": "Oi, tenho interesse no Alameda",
+          "sentiment": {},
+          "conversation": {
+            "assignee_id": 17,
+            "unread_count": 1,
+            "last_activity_at": 1792330000,
+            "contact_inbox": {
+              "source_id": "5511999999999"
+            }
+          },
+          "sender": {
+            "additional_attributes": {
+              "source_id": "5511999999999"
+            },
+            "custom_attributes": {},
+            "email": null,
+            "id": 401,
+            "identifier": null,
+            "name": "Maria Souza",
+            "phone_number": "+5511999999999",
+            "thumbnail": "",
+            "blocked": false,
+            "type": "contact"
+          }
+        },
+        "templateParams": {
+          "name": "arqos_leads_followup_text3",
+          "category": "MARKETING",
+          "language": "pt_BR",
+          "id": 33,
+          "waba_template_id": null,
+          "content_mode": "raw_template",
+          "processed_params": {
+            "header": {
+              "media_url": "https://cdn.arqos.online/a.jpg",
+              "media_type": "image"
+            },
+            "body": {
+              "msg_body": "linha única"
+            },
+            "buttons": [
+              {
+                "type": "url",
+                "parameter": "alameda"
+              }
+            ]
+          }
+        },
+        "now": "2026-10-18T13:45:30.123Z"
+      },
+      "expected": {
+        "headers": {
+          "host": "webhooks.arqos.online",
+          "content-type": "application/json"
+        },
+        "params": {},
+        "query": {},
+        "body": {
+          "account": {
+            "id": 3,
+            "name": "Account"
+          },
+          "additional_attributes": {},
+          "content_attributes": {
+            "in_reply_to": 5521
+          },
+          "content_type": "text",
+          "content": "Template: arqos_leads_followup_text3",
+          "conversation": {
+            "additional_attributes": {
+              "referer": null,
+              "origem": "meta_ads"
+            },
+            "can_reply": true,
+            "channel": "Channel::Api",
+            "contact_inbox": {
+              "source_id": ""
+            },
+            "id": 812,
+            "inbox_id": 9,
+            "messages": [
+              {
+                "id": 1792331130123,
+                "content": "Template: arqos_leads_followup_text3",
+                "account_id": 3,
+                "inbox_id": 9,
+                "conversation_id": 812,
+                "message_type": 1,
+                "created_at": 1792331130,
+                "updated_at": "2026-10-18T13:45:30.123Z",
+                "private": false,
+                "status": "sent",
+                "content_type": "text",
+                "sender_type": "User",
+                "sender_id": 17,
+                "sender": {
+                  "id": 17,
+                  "name": "Felipe Corretor",
+                  "email": "corretor@arqos.com.br",
+                  "type": "user",
+                  "availability_status": "online",
+                  "thumbnail": ""
+                }
+              }
+            ],
+            "meta": {
+              "sender": {
+                "additional_attributes": {},
+                "availability_status": "offline",
+                "email": null,
+                "id": 401,
+                "name": "Maria Souza",
+                "phone_number": "+5511999999999",
+                "blocked": false,
+                "identifier": null,
+                "thumbnail": "",
+                "custom_attributes": {},
+                "last_activity_at": 1792330000,
+                "created_at": 1792320000
+              },
+              "channel": "Channel::Api",
+              "assignee": {
+                "id": 17,
+                "account_id": 3,
+                "availability_status": "online",
+                "auto_offline": true,
+                "confirmed": true,
+                "email": "corretor@arqos.com.br",
+                "available_name": "Felipe Corretor",
+                "name": "Felipe Corretor",
+                "role": "agent",
+                "thumbnail": "",
+                "custom_role_id": null
+              },
+              "assignee_type": "User",
+              "hmac_verified": false
+            },
+            "status": "open",
+            "unread_count": 0,
+            "agent_last_seen_at": 1792331130
+          },
+          "created_at": "2026-10-18T13:45:30.123Z",
+          "id": 1792331130123,
+          "inbox": {
+            "id": 9,
+            "name": "WhatsApp Vendas"
+          },
+          "message_type": "outgoing",
+          "private": false,
+          "sender": {
+            "id": 17,
+            "name": "Felipe Corretor",
+            "email": "corretor@arqos.com.br",
+            "type": "user"
+          },
+          "event": "message_created",
+          "waba_template": {
+            "waba_template_id": 33,
+            "waba_template_name": "arqos_leads_followup_text3",
+            "waba_template_variables": {
+              "header": {
+                "media_url": "https://cdn.arqos.online/a.jpg",
+                "media_type": "image"
+              },
+              "body": {
+                "msg_body": "linha única"
+              },
+              "buttons": [
+                {
+                  "type": "url",
+                  "parameter": "alameda"
+                }
+              ]
+            }
+          }
+        },
+        "executionMode": "production"
+      }
+    }
+  ]
+}
