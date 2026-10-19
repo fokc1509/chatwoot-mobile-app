@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PagerView, { PagerViewOnPageSelectedEvent } from 'react-native-pager-view';
 import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -36,6 +36,8 @@ import { macroActions } from '@/store/macro/macroActions';
 import { selectInboxById } from '@/store/inbox/inboxSelectors';
 import { metaTemplateActions } from '@/store/meta-template/metaTemplateActions';
 import { isCommercialInbox } from '@/store/attendance/attendanceRules';
+import { isAttendanceInboxLoading } from '@/store/attendance/attendanceMenu';
+import { inboxActions } from '@/store/inbox/inboxActions';
 import { ApprovalBanner } from './components/attendance/ApprovalBanner';
 
 export const ChatWindow = (props: ChatScreenProps) => {
@@ -91,6 +93,18 @@ const ChatScreenWrapper = (props: ChatScreenProps) => {
   // conversation of an inbox with the feature on is opened.
   const inbox = useAppSelector(state => (inboxId ? selectInboxById(state, inboxId) : undefined));
   const templatesEnabled = !!inbox?.metaInboxConfig?.enabled;
+  // Cold start from a push opens this screen without the tabs, which are what fetch the
+  // inboxes: fetch them here (once per inbox) when this conversation's inbox is missing.
+  // Until it arrives the status controls treat the inbox as loading (attendanceMenu).
+  const inboxLoading = isAttendanceInboxLoading({ inbox });
+  const requestedInboxId = useRef<number | null>(null);
+  useEffect(() => {
+    if (inboxId && inboxLoading && requestedInboxId.current !== inboxId) {
+      requestedInboxId.current = inboxId;
+      dispatch(inboxActions.fetchInboxes());
+    }
+  }, [dispatch, inboxId, inboxLoading]);
+
   useEffect(() => {
     if (inboxId && templatesEnabled) {
       dispatch(metaTemplateActions.fetchTemplates(inboxId));

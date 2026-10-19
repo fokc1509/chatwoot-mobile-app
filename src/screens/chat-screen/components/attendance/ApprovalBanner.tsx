@@ -4,7 +4,7 @@ import Animated from 'react-native-reanimated';
 
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import i18n from '@/i18n';
-import { attendanceActions, type AttendanceError } from '@/store/attendance/attendanceActions';
+import { attendanceActions, narrowAttendanceError } from '@/store/attendance/attendanceActions';
 import type {
   AttendanceApprovalOption,
   AttendanceStatus,
@@ -23,7 +23,7 @@ import {
 /**
  * Supervisor Aprovar/Negar banner (port of the web sheet's `aprovacao` view). Mount only
  * for commercial inboxes. Status is re-read on open and whenever the conversation's
- * status/updatedAt/lastActivityAt change; fetch errors simply hide the banner.
+ * status/lastActivityAt change; fetch errors simply hide the banner.
  */
 export const ApprovalBanner = ({ conversationId }: { conversationId: number }) => {
   const dispatch = useAppDispatch();
@@ -70,10 +70,10 @@ export const ApprovalBanner = ({ conversationId }: { conversationId: number }) =
           messageId: model.messageId,
         }),
       ).unwrap();
-      refresh();
+      // No explicit refetch: clickOption refreshes the conversation, and the status is
+      // re-read when its status/lastActivityAt change (refreshKey effect).
     } catch (error) {
-      const message = (error as AttendanceError | undefined)?.message;
-      showToast({ message: message || i18n.t('ATTENDANCE.ERROR') });
+      showToast({ message: narrowAttendanceError(error).message });
     } finally {
       sendingRef.current = false;
       setSending(false);

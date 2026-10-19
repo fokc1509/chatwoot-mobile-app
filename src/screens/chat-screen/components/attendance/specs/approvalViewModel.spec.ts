@@ -95,12 +95,12 @@ describe('approvalContextLines', () => {
 });
 
 describe('approvalRefreshKey', () => {
-  it('changes when status, updatedAt or lastActivityAt change', () => {
-    const base = { id: 1, status: 'open', updatedAt: 10, lastActivityAt: 20 };
+  it('changes when status or lastActivityAt change', () => {
+    const base = { id: 1, status: 'open', lastActivityAt: 20 };
     const key = approvalRefreshKey(base);
     expect(approvalRefreshKey({ ...base })).toBe(key);
     expect(approvalRefreshKey({ ...base, status: 'resolved' })).not.toBe(key);
-    expect(approvalRefreshKey({ ...base, updatedAt: 11 })).not.toBe(key);
+    expect(approvalRefreshKey({ ...base, id: 2 })).not.toBe(key);
     expect(approvalRefreshKey({ ...base, lastActivityAt: 21 })).not.toBe(key);
     expect(approvalRefreshKey(undefined)).toBe('');
   });

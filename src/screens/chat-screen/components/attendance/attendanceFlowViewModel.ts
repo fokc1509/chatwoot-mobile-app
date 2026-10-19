@@ -1,4 +1,5 @@
 import I18n from '@/i18n';
+import { narrowAttendanceError } from '@/store/attendance/attendanceActions';
 import {
   ADIAR_MOTIVO_MIN,
   DISCARD_MOTIVOS,
@@ -204,20 +205,11 @@ export type FlowResult =
   | { status: 'error'; code?: string; message: string }
   | { status: 'invalid' };
 
-// Thunk rejections carry an AttendanceError ({ code?, message }) with a user-facing
-// message; anything else (Error, RTK SerializedError with `name`) is unexpected.
-const toFlowError = (error: unknown): FlowResult => {
-  const e = error as { code?: unknown; message?: unknown; name?: unknown } | null;
-  const isAttendanceError =
-    !!e && typeof e === 'object' && !(error instanceof Error) && e.name === undefined;
-  const message =
-    isAttendanceError && typeof e.message === 'string' && e.message
-      ? e.message
-      : I18n.t('ATTENDANCE.ERROR');
-  return typeof e?.code === 'string' && e.code
-    ? { status: 'error', code: e.code, message }
-    : { status: 'error', message };
-};
+// Thunk rejections carry an AttendanceError; anything else is the generic error.
+const toFlowError = (error: unknown): FlowResult => ({
+  status: 'error',
+  ...narrowAttendanceError(error),
+});
 
 /**
  * Runs a confirmed flow (AttendanceFlowHost runAction / runInteractiveReplyOnly):

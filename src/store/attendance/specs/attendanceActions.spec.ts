@@ -1,7 +1,7 @@
 import { configureStore, type AnyAction, type Middleware } from '@reduxjs/toolkit';
 
 import { ConversationService } from '@/store/conversation/conversationService';
-import { attendanceActions } from '../attendanceActions';
+import { attendanceActions, narrowAttendanceError } from '../attendanceActions';
 import { AttendanceService } from '../attendanceService';
 import type { AttendanceStatus } from '../attendanceTypes';
 
@@ -190,5 +190,27 @@ describe('attendanceActions', () => {
       expect(result.payload).toEqual({ message: 'Sem acesso' });
       expect(types(dispatched)).not.toContain('auth/logout');
     });
+  });
+});
+
+describe('narrowAttendanceError', () => {
+  it('keeps an AttendanceError rejection payload (message and code)', () => {
+    expect(narrowAttendanceError({ message: 'sem permissao' })).toEqual({
+      message: 'sem permissao',
+    });
+    expect(narrowAttendanceError({ code: 'MOTIVO_REQUIRED', message: 'curto' })).toEqual({
+      code: 'MOTIVO_REQUIRED',
+      message: 'curto',
+    });
+  });
+
+  it('falls back to the generic error for anything else', () => {
+    expect(narrowAttendanceError(new Error('boom'))).toEqual({ message: 'ATTENDANCE.ERROR' });
+    expect(narrowAttendanceError({ name: 'TypeError', message: 'x is undefined' })).toEqual({
+      message: 'ATTENDANCE.ERROR',
+    });
+    expect(narrowAttendanceError(undefined)).toEqual({ message: 'ATTENDANCE.ERROR' });
+    expect(narrowAttendanceError('oops')).toEqual({ message: 'ATTENDANCE.ERROR' });
+    expect(narrowAttendanceError({ message: '' })).toEqual({ message: 'ATTENDANCE.ERROR' });
   });
 });

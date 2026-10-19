@@ -217,7 +217,7 @@ type ConversationBasicActionsProps = {
   status: ConversationStatus | undefined;
   updateConversationStatus: (type: ConversationActionType, status?: ConversationStatus) => void;
   isMuted: boolean | false;
-  /** From attendanceMenuItems: null/undefined keeps the default status items. */
+  /** From attendanceMenuItems: null/undefined keeps the default status items; [] leaves only open. */
   attendanceItems?: AttendanceMenuItem[] | null;
   onAttendanceAction?: (item: AttendanceMenuItem) => void;
 };

@@ -17,7 +17,7 @@ import { resetSentMessage } from '@/store/conversation/sendMessageSlice';
 import { selectAllDashboardApps } from '@/store/dashboard-app/dashboardAppSlice';
 import { selectUser } from '@/store/auth/authSelectors';
 import { selectInboxById } from '@/store/inbox/inboxSelectors';
-import { ATTENDANCE_MENU_FLOWS, attendanceMenuItems } from '@/store/attendance/attendanceMenu';
+import { ATTENDANCE_MENU_FLOWS, headerStatusAction } from '@/store/attendance/attendanceMenu';
 import { useAttendanceFlow } from '../attendance/AttendanceFlowHost';
 
 type ChatScreenHeaderProps = {
@@ -48,9 +48,10 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
 
   const conversationStatus = conversation?.status;
   const isResolved = conversationStatus === CONVERSATION_STATUS.RESOLVED;
-  // Commercial inbox: the resolve button becomes Descartar (reopen stays as is).
-  const isDiscardAction =
-    !isResolved && attendanceMenuItems({ inbox, status: conversationStatus }) !== null;
+  // Commercial inbox: the resolve button becomes Descartar (reopen stays as is); hidden
+  // while the inbox is still loading so the stock resolve never shows for it.
+  const statusAction = headerStatusAction({ inbox, status: conversationStatus });
+  const isDiscardAction = statusAction === 'discard';
 
   const updateSlaStatus = useCallback(() => {
     if (appliedSla) {
@@ -126,14 +127,13 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
   };
 
   const toggleChatStatus = async () => {
+    if (statusAction === 'hidden') return;
     if (isDiscardAction) {
       attendanceFlow.open(ATTENDANCE_MENU_FLOWS.descartar, { conversationId });
       return;
     }
     const updatedStatus =
-      conversationStatus === CONVERSATION_STATUS.RESOLVED
-        ? CONVERSATION_STATUS.OPEN
-        : CONVERSATION_STATUS.RESOLVED;
+      statusAction === 'reopen' ? CONVERSATION_STATUS.OPEN : CONVERSATION_STATUS.RESOLVED;
     await dispatch(
       conversationActions.toggleConversationStatus({
         conversationId,
@@ -178,6 +178,7 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
       imageSrc={imageSrc}
       isResolved={isResolved}
       isDiscardAction={isDiscardAction}
+      isStatusActionHidden={statusAction === 'hidden'}
       dashboardsList={dashboardsList}
       isSlaMissed={slaStatus?.isSlaMissed}
       hasSla={!!appliedSla}

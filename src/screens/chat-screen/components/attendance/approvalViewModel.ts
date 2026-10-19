@@ -70,19 +70,13 @@ export const approvalContextLines = (
 type RefreshSource = {
   id?: number;
   status?: string;
-  updatedAt?: unknown;
   lastActivityAt?: unknown;
 };
 
-/** Changes whenever the conversation's status, updatedAt or lastActivityAt change. */
+/** Changes whenever the conversation's status or lastActivityAt change. */
 export const approvalRefreshKey = (conversation: RefreshSource | null | undefined): string =>
   conversation
-    ? [
-        conversation.id,
-        conversation.status,
-        conversation.updatedAt ?? '',
-        conversation.lastActivityAt ?? '',
-      ].join('|')
+    ? [conversation.id, conversation.status, conversation.lastActivityAt ?? ''].join('|')
     : '';
 
 export type RequestToken = { seq: number; conversationId: number };

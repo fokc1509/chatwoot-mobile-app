@@ -18,6 +18,8 @@ type ChatHeaderProps = {
   isResolved: boolean;
   /** Commercial inbox: the resolve button opens the Descartar flow. */
   isDiscardAction?: boolean;
+  /** Inbox still loading: no status button (avoids the stock resolve on a commercial inbox). */
+  isStatusActionHidden?: boolean;
   isSlaMissed?: boolean;
   hasSla?: boolean;
   slaEvents?: SLAEvent[];
@@ -33,6 +35,7 @@ export const ChatHeader = ({
   imageSrc,
   isResolved,
   isDiscardAction = false,
+  isStatusActionHidden = false,
   slaEvents,
   isSlaMissed,
   hasSla,
@@ -93,20 +96,22 @@ export const ChatHeader = ({
                 <Icon icon={<SLAIcon color={isSlaMissed ? '#E13D45' : '#BBBBBB'} />} size={24} />
               </Pressable>
             )}
-            <Pressable hitSlop={8} onPress={onToggleChatStatus}>
-              <Icon
-                icon={
-                  isDiscardAction ? (
-                    <Trash />
-                  ) : isResolved ? (
-                    <ResolvedIcon strokeWidth={2} stroke={tailwind.color('bg-green-700')} />
-                  ) : (
-                    <OpenIcon strokeWidth={2} />
-                  )
-                }
-                size={24}
-              />
-            </Pressable>
+            {isStatusActionHidden ? null : (
+              <Pressable hitSlop={8} onPress={onToggleChatStatus}>
+                <Icon
+                  icon={
+                    isDiscardAction ? (
+                      <Trash />
+                    ) : isResolved ? (
+                      <ResolvedIcon strokeWidth={2} stroke={tailwind.color('bg-green-700')} />
+                    ) : (
+                      <OpenIcon strokeWidth={2} />
+                    )
+                  }
+                  size={24}
+                />
+              </Pressable>
+            )}
           </Animated.View>
           {dashboardsList.length > 0 && (
             <ChatDropdownMenu dropdownMenuList={dashboardsList}>

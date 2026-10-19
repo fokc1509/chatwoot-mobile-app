@@ -3,8 +3,7 @@ import { Pressable, Text } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import i18n from '@/i18n';
-import { attendanceActions, type AttendanceError } from '@/store/attendance/attendanceActions';
+import { attendanceActions, narrowAttendanceError } from '@/store/attendance/attendanceActions';
 import { selectConversationById } from '@/store/conversation/conversationSelectors';
 import { selectInboxById } from '@/store/inbox/inboxSelectors';
 import { tailwind } from '@/theme';
@@ -46,8 +45,7 @@ export const OptionsBubble = ({ item, variant }: OptionsBubbleProps) => {
         attendanceActions.clickOption({ conversationId, item: option, messageId: item.id }),
       ).unwrap();
     } catch (error) {
-      const message = (error as AttendanceError | undefined)?.message;
-      showToast({ message: message || i18n.t('ATTENDANCE.ERROR') });
+      showToast({ message: narrowAttendanceError(error).message });
     } finally {
       sendingRef.current = false;
       setSending(false);
