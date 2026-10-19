@@ -4,6 +4,7 @@ import { UnixTimestamp } from './common';
 import { Contact } from './Contact';
 import { Conversation } from './Conversation';
 import { User } from './User';
+import type { MessageOptionItem } from '@/store/attendance/attendanceTypes';
 
 export type ContentType =
   | 'text'
@@ -63,6 +64,10 @@ export type MessageContentAttributes = {
   imageType: string;
   contentType: ContentType;
   isUnsupported: boolean;
+  // `input_select` notes: one button per item; follow-up notes carry the execution/step.
+  items?: MessageOptionItem[];
+  followupExecutionId?: number;
+  stepId?: number;
 };
 
 export interface Message {

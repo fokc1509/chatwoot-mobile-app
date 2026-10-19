@@ -588,5 +588,11 @@
       "WEBHOOK_FAILED": "O serviço de envio de templates falhou. Tente novamente.",
       "SYNC": "Não foi possível atualizar os templates. Tente novamente."
     }
+  },
+  "ATTENDANCE": {
+    "ERROR": "Não foi possível executar a ação. Tente novamente.",
+    "ADIAR_MODAL": {
+      "MOTIVO_REQUIRED": "Informe um motivo com pelo menos 5 caracteres."
+    }
   }
 }

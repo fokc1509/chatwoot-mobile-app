@@ -627,5 +627,11 @@
       "WEBHOOK_FAILED": "The template sending service failed. Please try again.",
       "SYNC": "Could not refresh the templates. Please try again."
     }
+  },
+  "ATTENDANCE": {
+    "ERROR": "Could not complete the action. Please try again.",
+    "ADIAR_MODAL": {
+      "MOTIVO_REQUIRED": "Enter a reason with at least 5 characters."
+    }
   }
 }
