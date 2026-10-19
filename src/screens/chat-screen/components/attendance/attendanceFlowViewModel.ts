@@ -165,7 +165,8 @@ export type FlowSessionAction =
 export const flowSessionReducer = (state: FlowSession, action: FlowSessionAction): FlowSession => {
   switch (action.type) {
     case 'open':
-      if (state.submitting) return state;
+      // One flow at a time: a re-open must not swap the ctx under a filled form.
+      if (state.active) return state;
       return {
         active: {
           flow: action.flow,

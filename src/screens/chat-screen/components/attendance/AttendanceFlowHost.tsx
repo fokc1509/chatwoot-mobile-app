@@ -84,14 +84,19 @@ export const AttendanceFlowProvider = ({ children }: { children: React.ReactNode
   );
 
   const api = useMemo(() => ({ open }), [open]);
+  // While a modal fades out after reset, keep rendering the last flow's copy
+  // (title, request mode) instead of falling back to the defaults.
+  const lastActiveRef = useRef<FlowSession['active']>(null);
+  if (session.active) lastActiveRef.current = session.active;
   const flow = session.active?.flow;
+  const shown = session.active ?? lastActiveRef.current;
 
   return (
     <AttendanceFlowContextRef.Provider value={api}>
       {children}
       <DiscardModal
         visible={flow === 'discard' || flow === 'discard_request_legacy'}
-        requestMode={session.active?.requestMode ?? false}
+        requestMode={shown?.requestMode ?? false}
         submitting={session.submitting}
         onSubmit={discard => submit({ discard })}
         onCancel={cancel}
@@ -106,7 +111,7 @@ export const AttendanceFlowProvider = ({ children }: { children: React.ReactNode
       />
       <ConfirmModal
         visible={flow === 'ia' || flow === 'enviar_msg'}
-        scope={flow === 'enviar_msg' ? 'ENVIAR_MSG_CONFIRM' : 'IA_CONFIRM'}
+        scope={shown?.flow === 'enviar_msg' ? 'ENVIAR_MSG_CONFIRM' : 'IA_CONFIRM'}
         submitting={session.submitting}
         onConfirm={() => submit({})}
         onCancel={cancel}

@@ -215,6 +215,18 @@ describe('flowSessionReducer', () => {
     ).toBe(submitting);
   });
 
+  it('open is ignored while another flow is active', () => {
+    const active = openSession('discard', { conversationId: 3 });
+    expect(
+      flowSessionReducer(active, {
+        type: 'open',
+        flow: 'ia',
+        ctx: { conversationId: 9 },
+        canDirect: true,
+      }),
+    ).toBe(active);
+  });
+
   it('submit is a no-op without an active flow or while one is in flight', () => {
     expect(flowSessionReducer(INITIAL_FLOW_SESSION, { type: 'submit' })).toBe(INITIAL_FLOW_SESSION);
     const submitting = flowSessionReducer(openSession('ia'), { type: 'submit' });
