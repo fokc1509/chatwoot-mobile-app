@@ -70,8 +70,10 @@ export const ApprovalBanner = ({ conversationId }: { conversationId: number }) =
           messageId: model.messageId,
         }),
       ).unwrap();
-      // No explicit refetch: clickOption refreshes the conversation, and the status is
-      // re-read when its status/lastActivityAt change (refreshKey effect).
+      // Hide the answered request right away, then re-read the status. The refreshKey
+      // effect may fetch again; the latest-request guard makes that harmless.
+      setStatus(null);
+      refresh();
     } catch (error) {
       showToast({ message: narrowAttendanceError(error).message });
     } finally {
